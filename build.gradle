@@ -1,0 +1,115 @@
+/*
+ * © Copyright - Lars Artmann aka. LartyHD 2019.
+ */
+
+
+buildscript {
+    ext {
+        kotlinVersion = '1.3.21'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+        classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+    }
+}
+
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'idea'
+
+group = pluginGroup
+version = pluginVersion
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/groups/public/'
+    }
+    maven {
+        name = 'sonatype'
+        url = 'https://oss.sonatype.org/content/groups/public/'
+    }
+    maven { url = "http://maven.elmakers.com/repository/" }
+    maven { url = ("https://jitpack.io") }
+    maven { url = "https://repo.velocitypowered.com/snapshots/" }
+    maven { url = "https://oss.sonatype.org/content/repositories/snapshots" }
+
+}
+
+
+configurations {
+    // configuration that holds jars to include in the jar
+    compile.extendsFrom jarLibs
+}
+
+dependencies {
+    compileOnly 'net.md-5:bungeecord-api:1.14-SNAPSHOT'
+    /*compileOnly 'com.velocitypowered:velocity-api:1.0.0-SNAPSHOT'*/
+
+//    compile group: 'com.google.code.gson', name: 'gson', version: '2.8.5'
+
+    jarLibs "org.jetbrains.kotlin:kotlin-stdlib"
+    jarLibs "org.jetbrains.kotlin:kotlin-reflect"
+    jarLibs "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1"
+
+    testCompileOnly "org.jetbrains.kotlin:kotlin-test"
+    testCompileOnly "org.jetbrains.kotlin:kotlin-test-junit5"
+    testCompileOnly "org.mockito:mockito-all:2.0.2-beta"
+    testCompileOnly "org.junit.jupiter:junit-jupiter-api:5.3.1"
+
+
+}
+
+jar {
+    from {
+        configurations.jarLibs.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+}
+
+wrapper {
+    gradleVersion = '5.2'
+    doFirst {
+        def tree = fileTree('src/main').include('**/*.kt')
+        tree.each { File file ->
+            def lines = file.readLines()
+            def list = []
+            lines.each { String line ->
+                list += line.replace("ProxyServer.getInstance().getConsole()", "console")
+            }
+            file.write(list.join("\n"), "UTF-8")
+        }
+    }
+}
+
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+        suppressWarnings = true
+    }
+}
+
+compileTestKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ['-Xjsr305=strict']
+        jvmTarget = '1.8'
+        suppressWarnings = true
+    }
+}
+
+import org.apache.tools.ant.filters.ReplaceTokens
+
+processResources {
+    from(sourceSets.main.resources.srcDirs) {
+        filter ReplaceTokens, tokens: [version: version]
+    }
+}
