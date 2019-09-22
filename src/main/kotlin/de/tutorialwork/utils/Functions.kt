@@ -12,19 +12,35 @@ import net.md_5.bungee.config.Configuration
 import java.io.File
 import java.net.URL
 import java.net.URLConnection
+import java.security.SecureRandom
 import java.util.*
 
 fun saveConfig(configuration: Configuration = config, file: File = configFile) = configProvider.save(configuration, file)
 
-fun ProxiedPlayer.sendTemp(type: String) {
-    var msg = config.getString("LAYOUT.TEMP$type")
+
+fun Int.randomString(): String {
+    val alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+    val rnd = SecureRandom()
+    val sb = StringBuilder(this)
+    for (i in 0 until this)
+        sb.append(alphabet[rnd.nextInt(alphabet.length)])
+    return sb.toString()
+}
+
+fun ProxiedPlayer.sendTempban() {
+    var msg = config.getString("LAYOUT.TEMPBAN")
+    msg = msg.replace("%grund%", uniqueId.reasonString)
+    msg = msg.replace("%dauer%", uniqueId.endTime)
+    kick(msg.translateColors())
+}
+
+
+fun ProxiedPlayer.sendTempmute() {
+    var msg = config.getString("LAYOUT.TEMPMUTE")
     msg = msg.replace("%grund%", uniqueId.reasonString)
     msg = msg.replace("%dauer%", uniqueId.endTime)
     msg(msg.translateColors())
 }
-
-
-fun ProxiedPlayer.sendTempmute() = sendTemp("MUTE")
 
 fun UUID.exists(sender: CommandSender): Unit? {
     val exists = this.playerExists()

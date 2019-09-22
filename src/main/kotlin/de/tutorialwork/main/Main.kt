@@ -42,7 +42,7 @@ class Main : Plugin() {
                     if (uuid.rawEnd == -1L) {
                         all.kick(config.getString("LAYOUT.BAN")
                                 .replace("%grund%", uuid.reasonString).translateColors())
-                    } else all.sendTemp("BAN")
+                    } else all.sendTempban()
                 }
             }
             saveConfig()

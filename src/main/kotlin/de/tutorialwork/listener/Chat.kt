@@ -6,7 +6,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.ChatEvent
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.event.EventHandler
-import java.security.SecureRandom
 import java.util.*
 
 object Chat : Listener {
@@ -37,10 +36,7 @@ object Chat : Listener {
                 } else {
                     if (System.currentTimeMillis() < uuid.rawEnd) {
                         e.isCancelled = true
-                        var msg = config.getString("LAYOUT.TEMPMUTE")
-                        msg = msg.replace("%grund%", uuid.reasonString)
-                        msg = msg.replace("%dauer%", uuid.endTime)
-                        p.msg(msg.translateColors())
+                        p.sendTempmute()
                     } else {
                         uuid.unMute()
                     }
@@ -147,13 +143,4 @@ object Chat : Listener {
     }
 
 
-    private const val alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
-    private var rnd = SecureRandom()
-
-    private fun Int.randomString(): String {
-        val sb = StringBuilder(this)
-        for (i in 0 until this)
-            sb.append(alphabet[rnd.nextInt(alphabet.length)])
-        return sb.toString()
-    }
 }

@@ -23,8 +23,8 @@ class Chatlog(name: String = Chatlog::class.java.simpleName) : Command(name) {
             if (sender.uniqueId != target) {
                 if (Chat.hasMessages(target)) {
                     val id = Chat.createChatlog(target, sender.uniqueId.toString())
-                    sender.msg(prefix + "Der Chatlog von §e§l" + target.name + " §7wurde erfolgreich erstellt")
-                    sender.msg(prefix + "Link: §e§l$chatLogUrl$id")
+                    sender.msg("${prefix}Der Chatlog von §e§l${target.name} §7wurde erfolgreich erstellt")
+                    sender.msg("${prefix}Link: §e§l$chatLogUrl$id")
                     LogManager.createEntry(target.toString(), sender.uniqueId.toString(), ActionType.Chatlog("CREATE_CHATLOG"))
                 } else sender.msg("$prefix§cDieser Spieler hat in der letzten Zeit keine Nachrichten verfasst")
             } else sender.msg("$prefix§cDu kannst kein Chatlog von dir selbst erstellen")

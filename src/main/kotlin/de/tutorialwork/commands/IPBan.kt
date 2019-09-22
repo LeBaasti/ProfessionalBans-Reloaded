@@ -18,6 +18,7 @@ object IPBan : Command("IPBan") {
                 if (args.isEmpty() || args.size == 1) {
                     for (zaehler in 1 until countReasons() + 1) {
                         if (zaehler.isBanReason) {
+                            sender.sendBanReasonsList()
                             sender.msg("§7" + zaehler + " §8| §e" + zaehler.reason)
                         }
                     }

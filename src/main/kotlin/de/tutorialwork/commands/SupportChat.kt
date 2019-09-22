@@ -75,8 +75,8 @@ class SupportChat(name: String) : Command(name) {
             } else {
                 //Normal Member
                 if (args.isEmpty()) {
-                    sender.msg(prefix + "Wenn du den §e§lSupport Chat §7starten möchtest gebe ein §8§oBetreff §7ein")
-                    sender.msg(prefix + "Möchtest du eine Anfrage abbrechen? §8§o/support cancel")
+                    sender.msg("${prefix}Wenn du den §e§lSupport Chat §7starten möchtest gebe ein §8§oBetreff §7ein")
+                    sender.msg("${prefix}Möchtest du eine Anfrage abbrechen? §8§o/support cancel")
                 } else {
                     var supporter = 0
                     for (all in players) {
@@ -85,14 +85,11 @@ class SupportChat(name: String) : Command(name) {
                         }
                     }
                     if (!args[0].equals("cancel", ignoreCase = true)) {
-                        var subject = ""
-                        for (i in args.indices) {
-                            subject = subject + " " + args[i]
-                        }
+                        val subject = args.drop(1).joinToString { " " }
                         if (!openchats.containsKey(sender)) {
                             if (supporter > 0) {
                                 openchats[sender] = subject
-                                sender.msg(prefix + "Du hast eine Anfrage mit dem Betreff §e§l" + subject + " §7gestartet")
+                                sender.msg("${prefix}Du hast eine Anfrage mit dem Betreff §e§l$subject §7gestartet")
                                 for (all in players) {
                                     if (all.hasPermission("professionalbans.supportchat")) {
                                         all.msg(prefix + "§e§l" + sender.name + " §7benötigt Support §8(§e§o" + subject + "§8)")
@@ -104,9 +101,7 @@ class SupportChat(name: String) : Command(name) {
                                         all.sendMessage(tc)
                                     }
                                 }
-                            } else {
-                                sender.msg("$prefix§cDerzeit ist kein Supporter online")
-                            }
+                            } else sender.msg("$prefix§cDerzeit ist kein Supporter online")
                         } else {
                             sender.msg(prefix + "Du hast bereits eine §e§lSupport Chat §7Anfrage gestellt")
                             sender.msg(prefix + "Möchtest du diese Anfrage §cabbrechen §7benutze §c§l/support cancel")
@@ -115,14 +110,10 @@ class SupportChat(name: String) : Command(name) {
                         if (!openchats.containsKey(sender)) {
                             openchats.remove(sender)
                             sender.msg(prefix + "Deine Anfrage wurde erfolgreich §cgelöscht")
-                        } else {
-                            sender.msg("$prefix§cDu hast derzeit keine offene Anfrage")
-                        }
+                        } else sender.msg("$prefix§cDu hast derzeit keine offene Anfrage")
                     }
                 }
             }
-        } else {
-            console.msg(prefix + "Der §e§lSupport Chat §7ist nur als Spieler verfügbar")
-        }
+        } else console.msg(prefix + "Der §e§lSupport Chat §7ist nur als Spieler verfügbar")
     }
 }

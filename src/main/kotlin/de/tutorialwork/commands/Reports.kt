@@ -33,17 +33,11 @@ class Reports(name: String) : Command(name) {
                                 tc.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT,
                                         ComponentBuilder("§7Klicken um §e§l" + target.name + " §7nachzuspringen").create())
                                 sender.sendMessage(tc)
-                            } else {
-                                offline++
-                            }
+                            } else offline++
                         }
-                        if (offline != 0) {
-                            sender.msg("§4§o$offline Reports §7§ovon Spieler die offline sind ausgeblendet")
-                        }
+                        if (offline != 0) sender.msg("§4§o$offline Reports §7§ovon Spieler die offline sind ausgeblendet")
                         sender.msg("§8[]===================================[]")
-                    } else {
-                        sender.msg("$prefix§cEs sind derzeit keine Reports offen")
-                    }
+                    } else sender.msg("$prefix§cEs sind derzeit keine Reports offen")
                 } else if (args[0].equals("jump", ignoreCase = true)) {
                     val target = proxyServer.getPlayer(args[1])
                     if (target != null) {
@@ -53,15 +47,9 @@ class Reports(name: String) : Command(name) {
                         sender.uniqueId.reportTeam(id)
                         sender.msg("${prefix}Du hast den Report von §e§l${id.reportName} §7wegen §c§l${id.reportReason} §aangenommen")
                         LogManager.createEntry(sender.uniqueId.toString(), null, ActionType.Report("REPORT_ACCEPT"))
-                    } else {
-                        sender.msg("$prefix§cDieser Spieler ist nicht mehr online")
-                    }
+                    } else sender.msg("$prefix§cDieser Spieler ist nicht mehr online")
                 }
-            } else {
-                sender.msg(noPerms)
-            }
-        } else {
-            console.msg("$prefix§e§lReports §7sind nur als Spieler verfügbar")
-        }
+            } else sender.msg(noPerms)
+        } else console.msg("$prefix§e§lReports §7sind nur als Spieler verfügbar")
     }
 }

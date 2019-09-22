@@ -64,11 +64,11 @@ object Login : Listener {
         if (uuid.isBanned) {
             if (uuid.rawEnd == -1L) {
                 event.isCancelled = true
-                event.cancelReason = de.tutorialwork.config.getString("LAYOUT.BAN").replace("%grund%", uuid.reasonString).translateColors()
+                event.cancelReason = config.getString("LAYOUT.BAN").replace("%grund%", uuid.reasonString).translateColors()
             } else {
                 if (System.currentTimeMillis() < uuid.rawEnd) {
                     event.isCancelled = true
-                    var msg = de.tutorialwork.config.getString("LAYOUT.TEMPBAN")
+                    var msg = config.getString("LAYOUT.TEMPBAN")
                     msg = msg.replace("%grund%", uuid.reasonString)
                     msg = msg.replace("%dauer%", uuid.endTime)
                     event.cancelReason = msg.translateColors()
@@ -83,24 +83,10 @@ object Login : Listener {
     fun onFinalLogin(e: PostLoginEvent) {
         val p = e.player
         if (p.hasPermission("professionalbans.reports")) {
-            if (countOpenReports() != 0) {
-                p.msg("""${prefix}Derzeit sind noch Ãƒâ€šÃ‚Â§eÃƒâ€šÃ‚Â§l${countOpenReports()} Reports Ãƒâ€šÃ‚Â§7offen""")
-            }
+            if (countOpenReports() != 0) p.msg("${prefix}Derzeit sind noch Ãƒâ€šÃ‚Â§eÃƒâ€šÃ‚Â§l${countOpenReports()} Reports Ãƒâ€šÃ‚Â§7offen")
         }
-        if (p.hasPermission("professionalbans.supportchat") || p.hasPermission("professionalbans.*")) {
-            if (openchats.isNotEmpty()) {
-                p.msg(prefix + "Derzeit sind noch Ãƒâ€šÃ‚Â§eÃƒâ€šÃ‚Â§l" + openchats.size + " Ãƒâ€šÃ‚Â§7Support Chat Anfragen Ãƒâ€šÃ‚Â§aoffen")
-            }
-        }
-        //Update Check
-        if (p.hasPermission("professionalbans.*")) {
-            if (callURL("https://api.spigotmc.org/legacy/update.php?resource=63657") != version) {
-                p.msg("Ãƒâ€šÃ‚Â§8[]===================================[]")
-                p.msg("Ãƒâ€šÃ‚Â§eÃƒâ€šÃ‚Â§lProfessionalBans Ãƒâ€šÃ‚Â§7Reloaded Ãƒâ€šÃ‚Â§8| Ãƒâ€šÃ‚Â§7Version Ãƒâ€šÃ‚Â§c$version")
-                p.msg("Ãƒâ€šÃ‚Â§cDu benutzt eine Ãƒâ€šÃ‚Â§cÃƒâ€šÃ‚Â§lVERALTETE Ãƒâ€šÃ‚Â§cVersion des Plugins!")
-                p.msg("Ãƒâ€šÃ‚Â§7Update: Ãƒâ€šÃ‚Â§4Ãƒâ€šÃ‚Â§lhttps://spigotmc.org/resources/63657")
-                p.msg("Ãƒâ€šÃ‚Â§8[]===================================[]")
-            }
+        if (p.hasPermission("professionalbans.supportchat")) {
+            if (openchats.isNotEmpty()) p.msg("${prefix}Derzeit sind noch Ãƒâ€šÃ‚Â§eÃƒâ€šÃ‚Â§l${openchats.size} Ãƒâ€šÃ‚Â§7Support Chat Anfragen Ãƒâ€šÃ‚Â§aoffen")
         }
     }
 
