@@ -1,14 +1,20 @@
 package de.tutorialwork.main
 
 import de.tutorialwork.commands.*
+import de.tutorialwork.config
 import de.tutorialwork.console
 import de.tutorialwork.listener.Chat
 import de.tutorialwork.listener.Login
 import de.tutorialwork.listener.Quit
+import de.tutorialwork.mysql
+import de.tutorialwork.prefix
 import de.tutorialwork.utils.BanManager
 import de.tutorialwork.utils.MySQLConnect
+import de.tutorialwork.utils.reasonString
+import de.tutorialwork.utils.translateColors
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.plugin.Command
+import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
 import net.md_5.bungee.config.ConfigurationProvider
 import net.md_5.bungee.config.YamlConfiguration
@@ -25,7 +31,6 @@ class Main : Plugin() {
     init {
         instance = this
     }
-
 
     override fun onEnable() {
         config()
@@ -44,7 +49,7 @@ class Main : Plugin() {
 
         //Überprüft auf Bans aus dem Webinterface
         proxy.scheduler.schedule(this, {
-            val config = File(Main.instance.dataFolder, "config.yml")
+            val config = File(Main.instance.dataFolder, "configFile.yml")
             try {
                 val configcfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(config)
                 for (all in proxy.players) {
@@ -52,10 +57,10 @@ class Main : Plugin() {
                     if (BanManager.isBanned(uuid)) {
                         if (BanManager.getRAWEnd(uuid) == -1L) {
                             all.disconnect(ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.BAN")
-                                    .replace("%grund%", BanManager.getReasonString(uuid))))
+                                    .replace("%grund%", uuid.reasonString)))
                         } else {
                             var msg = configcfg.getString("LAYOUT.TEMPBAN")
-                            msg = msg.replace("%grund%", BanManager.getReasonString(uuid))
+                            msg = msg.replace("%grund%", uuid.reasonString)
                             msg = msg.replace("%dauer%", BanManager.getEnd(uuid))
                             all.disconnect(ChatColor.translateAlternateColorCodes('&', msg))
                         }
@@ -71,7 +76,7 @@ class Main : Plugin() {
     private fun config() {
         if (!dataFolder.exists()) dataFolder.mkdir()
         val file = File(dataFolder.path, "mysql.yml")
-        val config = File(dataFolder.path, "config.yml")
+        val config = File(dataFolder.path, "configFile.yml")
         val blacklistfile = File(dataFolder.path, "blacklist.yml")
         try {
             if (!file.exists()) {
@@ -114,7 +119,7 @@ class Main : Plugin() {
                 configcfg.set("CHATLOG.URL", "DeinServer.net/BanWebinterface/public/chatlog.php?id=")
                 configcfg.set("AUTOMUTE.ENABLED", false)
                 configcfg.set("AUTOMUTE.AUTOREPORT", true)
-                //configcfg.set("AUTOMUTE.AUTOREPORT.REASON", "Automatischer Report");
+                //config.set("AUTOMUTE.AUTOREPORT.REASON", "Automatischer Report");
                 configcfg.set("AUTOMUTE.MUTEID", 0)
                 configcfg.set("AUTOMUTE.ADMUTEID", 0)
                 configcfg.set("BANTIME-INCREASE.ENABLED", true)
@@ -141,7 +146,7 @@ class Main : Plugin() {
                 for (ips in configcfg.getStringList("VPN.WHITELIST")) {
                     ipwhitelist.add(ips)
                 }
-                prefix = configcfg.getString("PREFIX").replace("&", "§")
+                prefix = configcfg.getString("PREFIX").translateColors()
                 increaseBans = configcfg.getBoolean("BANTIME-INCREASE.ENABLED")
                 increaseValue = configcfg.getInt("BANTIME-INCREASE.PERCENTRATE")
                 if (configcfg.getString("VPN.APIKEY").length == 27) {
@@ -193,54 +198,47 @@ class Main : Plugin() {
     }
 
     private fun registerCommands() {
-        try {
-            val file = File(dataFolder.path, "config.yml")
-            val cfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(file)
-            arrayOf(Ban("ban"),
-                    Unban("unban"),
-                    Kick("kick"),
-                    WebAccount("webaccount"),
-                    Check("check"),
-                    IPBan("ipban"),
-                    Blacklist("blacklist"),
-                    WebVerify("webverify"),
-                    SupportChat("support")
-            ).forEach { it.register() }
+        config
+        arrayOf(
+                Ban,
+                Unban("unban"),
+                Kick("kick"),
+                WebAccount("webaccount"),
+                Check("check"),
+                IPBan,
+                Blacklist("blacklist"),
+                WebVerify("webverify"),
+                SupportChat("support")
+        ).forEach(::register)
 
-
-            if (cfg.getBoolean("REPORTS.ENABLED")) {
-                Report("report").register()
-                Reports("reports").register()
-            }
-            if (cfg.getBoolean("CHATLOG.ENABLED")) Chatlog("chatlog").register()
-        } catch (e: IOException) {
-            e.printStackTrace()
+        if (config.getBoolean("REPORTS.ENABLED")) {
+            register(Report("report"))
+            register(Reports("reports"))
         }
+        if (config.getBoolean("CHATLOG.ENABLED")) register(Chatlog("chatlog"))
 
     }
 
-    private fun registerListeners() {
-        proxy.pluginManager.registerListener(this, Login())
-        proxy.pluginManager.registerListener(this, Chat())
-        proxy.pluginManager.registerListener(this, Quit())
-    }
+    private fun registerListeners() = arrayOf(
+            Login,
+            Chat,
+            Quit
+    ).forEach(::register)
 
     companion object {
 
         lateinit var instance: Main
-        lateinit var mysql: MySQLConnect
-        var prefix = "§e§lBANS §8• §7"
-        var noPerms = "$prefix§cDu hast keine Berechtigung diesen Befehl zu nutzen"
 
+        var noPerms = "$prefix§cDu hast keine Berechtigung diesen Befehl zu nutzen"
         var reportreasons = mutableListOf<String>()
+
         var blacklist = ArrayList<String>()
         var adblacklist = ArrayList<String>()
         var adwhitelist = ArrayList<String>()
         var ipwhitelist = ArrayList<String>()
-
         var increaseBans = true
-        var increaseValue: Int = 50
 
+        var increaseValue: Int = 50
         var APIKey: String? = null
 
         //==============================================
@@ -254,8 +252,11 @@ class Main : Plugin() {
             val inputStream = urlConn?.getInputStream() ?: return ""
             return inputStream.reader().readText()
         }
+
     }
 
-    private fun Command.register() = proxy.pluginManager.registerCommand(this@Main, this)
+    private fun register(command: Command) = proxy.pluginManager.registerCommand(this, command)
+
+    private fun register(listener: Listener) = proxy.pluginManager.registerListener(this, listener)
 
 }

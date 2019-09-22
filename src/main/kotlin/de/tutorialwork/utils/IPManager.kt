@@ -1,6 +1,7 @@
 package de.tutorialwork.utils
 
 import de.tutorialwork.main.Main
+import de.tutorialwork.mysql
 import java.sql.SQLException
 import java.util.*
 
@@ -11,7 +12,7 @@ object IPManager {
     fun ipExists(IP: String): Boolean {
         try {
 
-            val rs = Main.mysql.query("SELECT * FROM ips WHERE IP='$IP'")
+            val rs = mysql.query("SELECT * FROM ips WHERE IP='$IP'")
             if (rs!!.next()) {
                 return rs.getString("IP") != null
             }
@@ -26,7 +27,7 @@ object IPManager {
 
     fun insertIP(IP: String, uuid: UUID) {
         if (!ipExists(IP)) {
-            Main.mysql.update("INSERT INTO ips(IP, USED_BY, USED_AT, BANNED, REASON, END, TEAMUUID, BANS) " +
+            mysql.update("INSERT INTO ips(IP, USED_BY, USED_AT, BANNED, REASON, END, TEAMUUID, BANS) " +
                     "VALUES ('" + IP + "', '" + uuid + "', '" + System.currentTimeMillis() + "', '0', 'null', 'null', 'null', '0')")
         } else {
             updateIPInfos(IP, uuid)
@@ -35,7 +36,7 @@ object IPManager {
 
     private fun updateIPInfos(IP: String, newUUID: UUID) {
         if (ipExists(IP)) {
-            Main.mysql.update("UPDATE ips SET USED_BY = '" + newUUID + "', USED_AT='" + System.currentTimeMillis() + "' WHERE IP='" + IP + "'")
+            mysql.update("UPDATE ips SET USED_BY = '" + newUUID + "', USED_AT='" + System.currentTimeMillis() + "' WHERE IP='" + IP + "'")
         }
     }
 
@@ -44,10 +45,10 @@ object IPManager {
         val end = current + BanManager.getReasonTime(GrundID)!! * 60000L
         if (BanManager.getReasonTime(GrundID) == -1) {
             //Perma Ban
-            Main.mysql.update("UPDATE ips SET BANNED='1', REASON='" + BanManager.getReasonByID(GrundID) + "', END='-1', TEAMUUID='" + TeamUUID + "' WHERE IP='" + IP + "'")
+            mysql.update("UPDATE ips SET BANNED='1', REASON='" + GrundID.reason + "', END='-1', TEAMUUID='" + TeamUUID + "' WHERE IP='" + IP + "'")
         } else {
             //Temp Ban
-            Main.mysql.update("UPDATE ips SET BANNED='1', REASON='" + BanManager.getReasonByID(GrundID) + "', END='" + end + "', TEAMUUID='" + TeamUUID + "' WHERE IP='" + IP + "'")
+            mysql.update("UPDATE ips SET BANNED='1', REASON='" + GrundID.reason + "', END='" + end + "', TEAMUUID='" + TeamUUID + "' WHERE IP='" + IP + "'")
         }
     }
 
@@ -55,7 +56,7 @@ object IPManager {
     fun isBanned(IP: String): Boolean {
         if (ipExists(IP)) {
             try {
-                val rs = Main.mysql.query("SELECT * FROM ips WHERE IP='$IP'")
+                val rs = mysql.query("SELECT * FROM ips WHERE IP='$IP'")
                 if (rs!!.next()) {
                     return rs.getInt("BANNED") == 1
                 }
@@ -70,7 +71,7 @@ object IPManager {
     fun getReasonString(IP: String): String? {
         if (ipExists(IP)) {
             try {
-                val rs = Main.mysql.query("SELECT * FROM ips WHERE IP='$IP'")
+                val rs = mysql.query("SELECT * FROM ips WHERE IP='$IP'")
                 if (rs!!.next()) {
                     return rs.getString("REASON")
                 }
@@ -85,7 +86,7 @@ object IPManager {
     fun getRAWEnd(IP: String): Long? {
         if (ipExists(IP)) {
             try {
-                val rs = Main.mysql.query("SELECT * FROM ips WHERE IP='$IP'")
+                val rs = mysql.query("SELECT * FROM ips WHERE IP='$IP'")
                 if (rs!!.next()) {
                     return rs.getLong("END")
                 }
@@ -140,7 +141,7 @@ object IPManager {
 
     fun unban(IP: String) {
         if (ipExists(IP)) {
-            Main.mysql.update("UPDATE ips SET BANNED='0' WHERE IP='$IP'")
+            mysql.update("UPDATE ips SET BANNED='0' WHERE IP='$IP'")
         }
     }
 
@@ -174,7 +175,7 @@ object IPManager {
 
     fun getIPFromPlayer(uuid: UUID): String {
         try {
-            val rs = Main.mysql.query("SELECT * FROM ips WHERE USED_BY='$uuid'") ?: return ""
+            val rs = mysql.query("SELECT * FROM ips WHERE USED_BY='$uuid'") ?: return ""
             if (rs.next()) {
                 return rs.getString("IP")
             }
@@ -186,7 +187,7 @@ object IPManager {
 
     fun getPlayerFromIP(IP: String): UUID? {
         try {
-            val rs = Main.mysql.query("SELECT * FROM ips WHERE IP='$IP'")
+            val rs = mysql.query("SELECT * FROM ips WHERE IP='$IP'")
             if (rs!!.next()) {
                 return UUID.fromString(rs.getString("USED_BY"))
             }
@@ -200,7 +201,7 @@ object IPManager {
     fun getBans(IP: String): Int? {
         if (ipExists(IP)) {
             try {
-                val rs = Main.mysql.query("SELECT * FROM ips WHERE IP='$IP'")
+                val rs = mysql.query("SELECT * FROM ips WHERE IP='$IP'")
                 if (rs!!.next()) {
                     return rs.getInt("BANS")
                 }
@@ -214,7 +215,7 @@ object IPManager {
 
     private fun setBans(IP: String, Bans: Int) {
         if (ipExists(IP)) {
-            Main.mysql.update("UPDATE ips SET BANS='$Bans' WHERE IP='$IP'")
+            mysql.update("UPDATE ips SET BANS='$Bans' WHERE IP='$IP'")
         }
     }
 
@@ -225,7 +226,7 @@ object IPManager {
     fun getLastUseLong(IP: String): Long {
         if (ipExists(IP)) {
             try {
-                val rs = Main.mysql.query("SELECT * FROM ips WHERE IP='$IP'")
+                val rs = mysql.query("SELECT * FROM ips WHERE IP='$IP'")
                 if (rs!!.next()) {
                     return java.lang.Long.valueOf(rs.getString("USED_AT"))
                 }

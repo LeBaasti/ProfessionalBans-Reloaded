@@ -1,7 +1,7 @@
 package de.tutorialwork.commands
 
 import de.tutorialwork.console
-import de.tutorialwork.main.Main
+import de.tutorialwork.prefix
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.chat.ClickEvent
@@ -22,17 +22,17 @@ class SupportChat(name: String) : Command(name) {
                         for (key in activechats.keys) {
                             //Key has started the support chat
                             if (key === sender) {
-                                activechats[sender]?.sendMessage(Main.prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
+                                activechats[sender]?.sendMessage(prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
                                 activechats.remove(key)
                             } else {
-                                key.sendMessage(Main.prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
+                                key.sendMessage(prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
                                 activechats.remove(key)
                             }
                         }
-                        sender.sendMessage(Main.prefix + "§cDu hast den Support Chat beendet")
+                        sender.sendMessage(prefix + "§cDu hast den Support Chat beendet")
                         return
                     } else {
-                        sender.sendMessage(Main.prefix + "§cDu hast derzeit keinen offenen Support Chat")
+                        sender.sendMessage(prefix + "§cDu hast derzeit keinen offenen Support Chat")
                         return
                     }
                 }
@@ -45,13 +45,13 @@ class SupportChat(name: String) : Command(name) {
                             if (openchats.containsKey(all)) {
                                 activechats[all] = sender
                                 openchats.remove(all)
-                                all.sendMessage(Main.prefix + "§e§l" + sender.name + " §7ist jetzt mit dir im Support Chat")
-                                all.sendMessage(Main.prefix + "§8§oDu kannst in den Support Chat schreiben in dem du einfach eine normale Nachricht schreibst")
-                                all.sendMessage(Main.prefix + "§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
-                                sender.sendMessage(Main.prefix + "§e§l" + all.getName() + " §7ist jetzt im Support Chat mit dir")
-                                sender.sendMessage(Main.prefix + "§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
+                                all.sendMessage(prefix + "§e§l" + sender.name + " §7ist jetzt mit dir im Support Chat")
+                                all.sendMessage(prefix + "§8§oDu kannst in den Support Chat schreiben in dem du einfach eine normale Nachricht schreibst")
+                                all.sendMessage(prefix + "§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
+                                sender.sendMessage(prefix + "§e§l" + all.getName() + " §7ist jetzt im Support Chat mit dir")
+                                sender.sendMessage(prefix + "§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
                             } else {
-                                sender.sendMessage(Main.prefix + "§cDiese Anfrage ist ausgelaufen")
+                                sender.sendMessage(prefix + "§cDiese Anfrage ist ausgelaufen")
                             }
                         }
                     }
@@ -69,16 +69,16 @@ class SupportChat(name: String) : Command(name) {
                             i++
                         }
                         sender.sendMessage("§8[]===================================[]")
-                        sender.sendMessage(Main.prefix + "Es sind derzeit §e§l" + i + " Support Chats §7Anfragen §aoffen")
+                        sender.sendMessage(prefix + "Es sind derzeit §e§l" + i + " Support Chats §7Anfragen §aoffen")
                     } else {
-                        sender.sendMessage(Main.prefix + "§cDerzeit sind keine Support Chats Anfragen offen")
+                        sender.sendMessage(prefix + "§cDerzeit sind keine Support Chats Anfragen offen")
                     }
                 }
             } else {
                 //Normal Member
                 if (args.isEmpty()) {
-                    sender.sendMessage(Main.prefix + "Wenn du den §e§lSupport Chat §7starten möchtest gebe ein §8§oBetreff §7ein")
-                    sender.sendMessage(Main.prefix + "Möchtest du eine Anfrage abbrechen? §8§o/support cancel")
+                    sender.sendMessage(prefix + "Wenn du den §e§lSupport Chat §7starten möchtest gebe ein §8§oBetreff §7ein")
+                    sender.sendMessage(prefix + "Möchtest du eine Anfrage abbrechen? §8§o/support cancel")
                 } else {
                     var supporter = 0
                     for (all in ProxyServer.getInstance().getPlayers()) {
@@ -94,10 +94,10 @@ class SupportChat(name: String) : Command(name) {
                         if (!openchats.containsKey(sender)) {
                             if (supporter > 0) {
                                 openchats[sender] = subject
-                                sender.sendMessage(Main.prefix + "Du hast eine Anfrage mit dem Betreff §e§l" + subject + " §7gestartet")
+                                sender.sendMessage(prefix + "Du hast eine Anfrage mit dem Betreff §e§l" + subject + " §7gestartet")
                                 for (all in ProxyServer.getInstance().getPlayers()) {
                                     if (all.hasPermission("professionalbans.supportchat") || all.hasPermission("professionalbans.*")) {
-                                        all.sendMessage(Main.prefix + "§e§l" + sender.name + " §7benötigt Support §8(§e§o" + subject + "§8)")
+                                        all.sendMessage(prefix + "§e§l" + sender.name + " §7benötigt Support §8(§e§o" + subject + "§8)")
                                         val tc = TextComponent()
                                         tc.text = "§aSupport Chat starten"
                                         tc.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/support " + sender.name)
@@ -106,24 +106,24 @@ class SupportChat(name: String) : Command(name) {
                                     }
                                 }
                             } else {
-                                sender.sendMessage(Main.prefix + "§cDerzeit ist kein Supporter online")
+                                sender.sendMessage(prefix + "§cDerzeit ist kein Supporter online")
                             }
                         } else {
-                            sender.sendMessage(Main.prefix + "Du hast bereits eine §e§lSupport Chat §7Anfrage gestellt")
-                            sender.sendMessage(Main.prefix + "Möchtest du diese Anfrage §cabbrechen §7benutze §c§l/support cancel")
+                            sender.sendMessage(prefix + "Du hast bereits eine §e§lSupport Chat §7Anfrage gestellt")
+                            sender.sendMessage(prefix + "Möchtest du diese Anfrage §cabbrechen §7benutze §c§l/support cancel")
                         }
                     } else {
                         if (!openchats.containsKey(sender)) {
                             openchats.remove(sender)
-                            sender.sendMessage(Main.prefix + "Deine Anfrage wurde erfolgreich §cgelöscht")
+                            sender.sendMessage(prefix + "Deine Anfrage wurde erfolgreich §cgelöscht")
                         } else {
-                            sender.sendMessage(Main.prefix + "§cDu hast derzeit keine offene Anfrage")
+                            sender.sendMessage(prefix + "§cDu hast derzeit keine offene Anfrage")
                         }
                     }
                 }
             }
         } else {
-            console.sendMessage(Main.prefix + "Der §e§lSupport Chat §7ist nur als Spieler verfügbar")
+            console.sendMessage(prefix + "Der §e§lSupport Chat §7ist nur als Spieler verfügbar")
         }
     }
 

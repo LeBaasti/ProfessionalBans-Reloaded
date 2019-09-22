@@ -1,9 +1,12 @@
 package de.tutorialwork.listener
 
 import de.tutorialwork.commands.SupportChat
+import de.tutorialwork.consoleName
+import de.tutorialwork.listener.Chat.Companion.insertMessage
 import de.tutorialwork.main.Main
-import de.tutorialwork.utils.BanManager
-import de.tutorialwork.utils.LogManager
+import de.tutorialwork.mysql
+import de.tutorialwork.prefix
+import de.tutorialwork.utils.*
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.event.ChatEvent
@@ -17,7 +20,7 @@ import java.security.SecureRandom
 import java.sql.SQLException
 import java.util.*
 
-class Chat : Listener {
+object Chat : Listener {
 
     @EventHandler
     fun onChat(e: ChatEvent) {
@@ -39,18 +42,18 @@ class Chat : Listener {
             }
             val uuid = p.uniqueId
             if (BanManager.isMuted(uuid)) {
-                val config = File(Main.instance.dataFolder, "config.yml")
+                val config = File(Main.instance.dataFolder, "configFile.yml")
                 try {
                     val configcfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(config)
 
                     if (BanManager.getRAWEnd(uuid) == -1L) {
                         e.isCancelled = true
-                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.MUTE").replace("%grund%", BanManager.getReasonString(uuid))))
+                        p.sendMessage(ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.MUTE").replace("%grund%", uuid.reasonString)))
                     } else {
                         if (System.currentTimeMillis() < BanManager.getRAWEnd(uuid) ?: 0) {
                             e.isCancelled = true
                             var MSG = configcfg.getString("LAYOUT.TEMPMUTE")
-                            MSG = MSG.replace("%grund%", BanManager.getReasonString(uuid))
+                            MSG = MSG.replace("%grund%", uuid.reasonString)
                             MSG = MSG.replace("%dauer%", BanManager.getEnd(uuid))
                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', MSG))
                         } else {
@@ -64,7 +67,7 @@ class Chat : Listener {
                 }
 
             } else {
-                val config = File(Main.instance.dataFolder, "config.yml")
+                val config = File(Main.instance.dataFolder, "configFile.yml")
                 try {
                     val configcfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(config)
 
@@ -74,17 +77,16 @@ class Chat : Listener {
                             for (blacklist in Main.blacklist) {
                                 if (e.message.toUpperCase().contains(blacklist.toUpperCase())) {
                                     e.isCancelled = true
-                                    BanManager.mute(uuid, configcfg.getInt("AUTOMUTE.MUTEID"), "KONSOLE")
-                                    LogManager.createEntry(uuid.toString(), "KONSOLE", "AUTOMUTE_BLACKLIST", e.message)
+                                    BanManager.mute(uuid, configcfg.getInt("AUTOMUTE.MUTEID"), consoleName)
+                                    LogManager.createEntry(uuid.toString(), consoleName, "AUTOMUTE_BLACKLIST", e.message)
                                     BanManager.setMutes(uuid, BanManager.getMutes(uuid) + 1)
-                                    BanManager.sendNotify("MUTE", BanManager.getNameByUUID(uuid).toString()
-                                            , "KONSOLE", BanManager.getReasonByID(configcfg.getInt("AUTOMUTE.MUTEID")))
+                                    ActionType.Mute(configcfg.getInt("AUTOMUTE.MUTEID")).sendNotify(uuid.name, consoleName)
                                     if (BanManager.getRAWEnd(uuid) == -1L) {
                                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.MUTE")
-                                                .replace("%grund%", BanManager.getReasonByID(configcfg.getInt("AUTOMUTE.MUTEID")).toString())))
+                                                .replace("%grund%", configcfg.getInt("AUTOMUTE.MUTEID").reason)))
                                     } else {
                                         var MSG = configcfg.getString("LAYOUT.TEMPMUTE")
-                                        MSG = MSG.replace("%grund%", BanManager.getReasonString(uuid))
+                                        MSG = MSG.replace("%grund%", uuid.reasonString)
                                         MSG = MSG.replace("%dauer%", BanManager.getEnd(uuid))
                                         p.sendMessage(ChatColor.translateAlternateColorCodes('&', MSG))
                                     }
@@ -95,16 +97,16 @@ class Chat : Listener {
                                 if (e.message.toUpperCase().contains(adblacklist.toUpperCase())) {
                                     if (!Main.adwhitelist.contains(e.message.toUpperCase())) {
                                         e.isCancelled = true
-                                        BanManager.mute(uuid, configcfg.getInt("AUTOMUTE.ADMUTEID"), "KONSOLE")
-                                        LogManager.createEntry(uuid.toString(), "KONSOLE", "AUTOMUTE_ADBLACKLIST", e.message)
+                                        BanManager.mute(uuid, configcfg.getInt("AUTOMUTE.ADMUTEID"), consoleName)
+                                        LogManager.createEntry(uuid.toString(), consoleName, "AUTOMUTE_ADBLACKLIST", e.message)
                                         BanManager.setMutes(uuid, BanManager.getMutes(uuid) + 1)
-                                        BanManager.sendNotify("MUTE", BanManager.getNameByUUID(uuid).toString(), "KONSOLE", BanManager.getReasonByID(configcfg.getInt("AUTOMUTE.ADMUTEID")))
+                                        ActionType.Mute(configcfg.getInt("AUTOMUTE.ADMUTEID")).sendNotify(uuid.name, consoleName)
                                         if (BanManager.getRAWEnd(uuid) == -1L) {
                                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.MUTE")
-                                                    .replace("%grund%", BanManager.getReasonByID(configcfg.getInt("AUTOMUTE.MUTEID")))))
+                                                    .replace("%grund%", configcfg.getInt("AUTOMUTE.MUTEID").reason)))
                                         } else {
                                             var msg = configcfg.getString("LAYOUT.TEMPMUTE")
-                                            msg = msg.replace("%grund%", BanManager.getReasonString(uuid))
+                                            msg = msg.replace("%grund%", uuid.reasonString)
                                             msg = msg.replace("%dauer%", BanManager.getEnd(uuid))
                                             p.sendMessage(ChatColor.translateAlternateColorCodes('&', msg))
                                         }
@@ -118,10 +120,10 @@ class Chat : Listener {
                                 for (blacklist in Main.blacklist) {
                                     if (e.message.toUpperCase().contains(blacklist.toUpperCase())) {
                                         e.isCancelled = true
-                                        p.sendMessage(Main.prefix + "§cAchte auf deine Wortwahl")
-                                        val LogID = Chat.createChatlog(uuid, "KONSOLE")
-                                        BanManager.createReport(uuid, "KONSOLE", "VERHALTEN", LogID)
-                                        BanManager.sendNotify("REPORT", p.name, "KONSOLE", "VERHALTEN")
+                                        p.sendMessage(prefix + "§cAchte auf deine Wortwahl")
+                                        val LogID = Chat.createChatlog(uuid, consoleName)
+                                        BanManager.createReport(uuid, consoleName, "VERHALTEN", LogID)
+                                        ActionType.Report("VERHALTEN").sendNotify(p.name, consoleName)
                                         return
                                     }
                                 }
@@ -129,10 +131,10 @@ class Chat : Listener {
                                     if (e.message.toUpperCase().contains(adblacklist.toUpperCase())) {
                                         if (!Main.adwhitelist.contains(e.message.toUpperCase())) {
                                             e.isCancelled = true
-                                            p.sendMessage(Main.prefix + "§cDu darfst keine Werbung machen")
-                                            val LogID = Chat.createChatlog(uuid, "KONSOLE")
-                                            BanManager.createReport(uuid, "KONSOLE", "WERBUNG", LogID)
-                                            BanManager.sendNotify("REPORT", p.name, "KONSOLE", "WERBUNG")
+                                            p.sendMessage("$prefix§cDu darfst keine Werbung machen")
+                                            val LogID = Chat.createChatlog(uuid, consoleName)
+                                            BanManager.createReport(uuid, consoleName, "WERBUNG", LogID)
+                                            ActionType.Report("WERBUNG").sendNotify(p.name, consoleName)
                                             return
                                         }
                                     }
@@ -154,20 +156,20 @@ class Chat : Listener {
     companion object {
 
         fun insertMessage(uuid: UUID, Message: String, Server: String) {
-            Main.mysql.update("INSERT INTO chat(UUID, SERVER, MESSAGE, SENDDATE) " +
+            mysql.update("INSERT INTO chat(UUID, SERVER, MESSAGE, SENDDATE) " +
                     "VALUES ('" + uuid + "', '" + Server + "', '" + Message + "', '" + System.currentTimeMillis() + "')")
         }
 
         fun createChatlog(uuid: UUID, createdUUID: String): String {
             try {
-                val rs = Main.mysql.query("SELECT * FROM chat WHERE uuid='$uuid'") ?: return "Null"
+                val rs = mysql.query("SELECT * FROM chat WHERE uuid='$uuid'") ?: return "Null"
                 val id = randomString(20)
                 val now = System.currentTimeMillis()
                 while (rs.next()) {
                     val tenMinutes = 10 * 60 * 1000
                     val tenAgo = System.currentTimeMillis() - tenMinutes
                     if (java.lang.Long.valueOf(rs.getString("SENDDATE")) > tenAgo) {
-                        Main.mysql.update("INSERT INTO chatlog(LOGID, uuid, CREATOR_UUID, SERVER, MESSAGE, SENDDATE, CREATED_AT) " +
+                        mysql.update("INSERT INTO chatlog(LOGID, uuid, CREATOR_UUID, SERVER, MESSAGE, SENDDATE, CREATED_AT) " +
                                 "VALUES ('" + id + "' ,'" + uuid + "', '" + createdUUID + "', '" + rs.getString("SERVER") + "', '" + rs.getString("MESSAGE") + "', '" + rs.getString("SENDDATE") + "', '" + now + "')")
                     }
                 }
@@ -181,7 +183,7 @@ class Chat : Listener {
 
         fun hasMessages(uuid: UUID): Boolean {
             return try {
-                val rs = Main.mysql.query("SELECT * FROM chat WHERE uuid='$uuid'") ?: return false
+                val rs = mysql.query("SELECT * FROM chat WHERE uuid='$uuid'") ?: return false
                 var i = 0
                 while (rs.next()) {
                     i++

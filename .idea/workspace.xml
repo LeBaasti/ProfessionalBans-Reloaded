@@ -9,66 +9,31 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1e73add8-8e82-4da6-af59-707eb24f2b62" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules/ProfessionalBans-Reloaded.main.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/saveactions_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradle.properties" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/gradlew.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/settings.grade" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/Global.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Ban.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Blacklist.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Check.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Kick.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Report.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Reports.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/SupportChat.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Unban.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebAccount.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebVerify.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Chat.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Login.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Quit.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/main/Main.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/Functions.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPManager.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/MySQLConnect.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/UUIDFetcher.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1e73add8-8e82-4da6-af59-707eb24f2b62" name="Default Changelist" comment="Upload Project with Kotlin&#10;Improve Code">
+      <change afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/ActionType.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Ban.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Blacklist.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Chatlog.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Check.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/IPBan.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Kick.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/ProfessionalBans.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Report.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Reports.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/SupportChat.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/Unban.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/WebAccount.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/commands/WebVerify.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/listener/Chat.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/listener/Login.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/listener/Quit.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/main/Main.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/BCrypt.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BCrypt.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/BanManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/IPManager.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/LogManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/LogManager.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/Metrics.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/MySQLConnect.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/RandomString.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/de/tutorialwork/utils/UUIDFetcher.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/plugin.yml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/plugin.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/Global.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/Global.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Ban.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Ban.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Blacklist.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Blacklist.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Check.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Check.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Kick.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Kick.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Report.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Report.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Reports.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Reports.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/SupportChat.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/SupportChat.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Unban.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Unban.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebAccount.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebAccount.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebVerify.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebVerify.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Chat.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Chat.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Login.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Login.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Quit.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Quit.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/main/Main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/main/Main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/Functions.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/Functions.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/LogManager.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/LogManager.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/MySQLConnect.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/MySQLConnect.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/.gradle/" />
     <ignored path="$PROJECT_DIR$/build/" />
@@ -120,13 +85,10 @@
   <component name="FileEditorManager">
     <leaf>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/Functions.kt">
+        <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="13" column="40" selection-start-line="13" selection-start-column="40" selection-end-line="13" selection-end-column="40" />
-              <folding>
-                <element signature="e#31#118#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="400">
+              <caret line="402" selection-start-line="402" selection-end-line="402" />
             </state>
           </provider>
         </entry>
@@ -143,11 +105,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>BanManager.ban</find>
-      <find>BanManager.mute</find>
-      <find>UPDATE</find>
-      <find>set</find>
-      <find>YOUR</find>
       <find>change</find>
       <find>§k</find>
       <find>LogManager</find>
@@ -158,6 +115,26 @@
       <find>Random</find>
       <find>p.uniqueId.toString()</find>
       <find>!!</find>
+      <find>ProxyServer.getInstance().getPlayers()</find>
+      <find>|| all.hasPermission(&quot;professionalbans.*&quot;)</find>
+      <find>sendMessage</find>
+      <find>all.msg(</find>
+      <find>type.</find>
+      <find>val reason</find>
+      <find>de.tutorialwork.</find>
+      <find>reasonString</find>
+      <find>proxyServer.console.name</find>
+      <find>&quot;KICK&quot;</find>
+      <find>&quot;IPBAN&quot;</find>
+      <find>&quot;REPORT&quot;</find>
+      <find>&quot;UNMUTE&quot;</find>
+      <find>&quot;UNBAN&quot;</find>
+      <find>&quot;UNBANIP&quot;</find>
+      <find>, &quot;null&quot;</find>
+      <find>&quot;MUTE&quot;</find>
+      <find>, id.reason.toString()</find>
+      <find>sender.name, id.reason.toString()</find>
+      <find>&quot;KONSOLE&quot;</find>
     </findStrings>
     <replaceStrings>
       <replace>§o</replace>
@@ -170,7 +147,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/settings.grade" />
         <option value="$PROJECT_DIR$/gradle.properties" />
         <option value="$PROJECT_DIR$/src/main/java/de/tutorialwork/Global.kt" />
         <option value="$PROJECT_DIR$/src/main/java/de/tutorialwork/commands/Check.kt" />
@@ -198,29 +174,30 @@
         <option value="$PROJECT_DIR$/src/main/java/de/tutorialwork/commands/Chatlog.kt" />
         <option value="$PROJECT_DIR$/src/main/java/de/tutorialwork/listener/Chat.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/RandomString.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/Global.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/UUIDFetcher.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/LogManager.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPManager.kt" />
         <option value="$PROJECT_DIR$/build.gradle" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Blacklist.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebVerify.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebAccount.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Unban.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/SupportChat.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Reports.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Report.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Kick.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Check.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Ban.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Chat.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Login.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Quit.kt" />
-        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/main/Main.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Blacklist.kt" />
         <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/Functions.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/Global.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/main/Main.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/LogManager.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Report.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/ActionType.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Unban.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Chat.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Kick.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Login.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Ban.kt" />
+        <option value="$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt" />
       </list>
     </option>
   </component>
@@ -240,35 +217,34 @@
     </navigator>
     <panes>
       <pane id="PackagesPane" />
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
@@ -276,7 +252,7 @@
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
@@ -285,7 +261,7 @@
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
@@ -295,7 +271,7 @@
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
@@ -305,7 +281,7 @@
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
@@ -315,13 +291,20 @@
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
-              <item name="ProfessionalBans-Reloaded" type="462c0819:PsiDirectoryNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="kotlin" type="462c0819:PsiDirectoryNode" />
               <item name="de" type="462c0819:PsiDirectoryNode" />
               <item name="tutorialwork" type="462c0819:PsiDirectoryNode" />
               <item name="utils" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="ProfessionalBans-Reloaded" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="resources" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
@@ -353,10 +336,101 @@
               <item name="java" type="462c0819:PsiDirectoryNode" />
               <item name="security" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-api:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-api:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-api-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-api:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-api-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-api:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-api-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+              <item name="md_5" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-api:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-api-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+              <item name="md_5" type="462c0819:PsiDirectoryNode" />
+              <item name="bungee" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-api:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-api-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+              <item name="md_5" type="462c0819:PsiDirectoryNode" />
+              <item name="bungee" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-chat:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-chat:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-chat-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-chat:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-chat-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-chat:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-chat-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+              <item name="md_5" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-chat:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-chat-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+              <item name="md_5" type="462c0819:PsiDirectoryNode" />
+              <item name="bungee" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="ProfessionalBans-Reloaded" type="b2602c69:ProjectViewProjectNode" />
+              <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
+              <item name="Gradle: net.md-5:bungeecord-chat:1.14-SNAPSHOT" type="70bed36:NamedLibraryElementNode" />
+              <item name="bungeecord-chat-1.14-SNAPSHOT.jar" type="462c0819:PsiDirectoryNode" />
+              <item name="net" type="462c0819:PsiDirectoryNode" />
+              <item name="md_5" type="462c0819:PsiDirectoryNode" />
+              <item name="bungee" type="462c0819:PsiDirectoryNode" />
+              <item name="api" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -365,7 +439,7 @@
     <property name="GenerateAntBuildDialog.forceTargetJdk" value="true" />
     <property name="GenerateAntBuildDialog.outputFileNameProperty" value="professionalbans_reloaded" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../New SkyEpic/Velocity-SkyEpic-System" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -373,20 +447,20 @@
     <property name="settings.editor.selected.configurable" value="settings.saveactions" />
   </component>
   <component name="RecentsManager">
-    <key name="CreateClassDialog.RecentsKey">
-      <recent name="de.tutorialwork.listener" />
-      <recent name="de.tutorialwork.commands" />
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\JetBrains\Projekts\GitHub\ProfessionalBans-Reloaded\src\main\resources" />
+      <recent name="D:\JetBrains\Projekts\GitHub\ProfessionalBans-Reloaded\src\main\java" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
       <recent name="D:\JetBrains\Projekts\GitHub\ProfessionalBans-Reloaded\libs" />
       <recent name="D:\JetBrains\Projekts\GitHub\ProfessionalBans-Reloaded" />
     </key>
-    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
-      <recent name="" />
-    </key>
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\JetBrains\Projekts\GitHub\ProfessionalBans-Reloaded\src\main\resources" />
-      <recent name="D:\JetBrains\Projekts\GitHub\ProfessionalBans-Reloaded\src\main\java" />
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="de.tutorialwork.listener" />
+      <recent name="de.tutorialwork.commands" />
     </key>
   </component>
   <component name="RunDashboard">
@@ -465,7 +539,21 @@
       <option name="project" value="LOCAL" />
       <updated>1567429693431</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Upload Project with Kotlin&#10;Improve Code">
+      <created>1569003916563</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1569003916563</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Upload Project with Kotlin&#10;Improve Code">
+      <created>1569004019591</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1569004019591</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -476,7 +564,6 @@
       <window_info id="Favorites" order="1" side_tool="true" />
       <window_info active="true" content_ui="combo" id="Project" order="2" visible="true" weight="0.25" />
       <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection Results" weight="0.32964823" />
       <window_info anchor="bottom" id="Terminal" order="0" weight="0.32964823" />
       <window_info anchor="bottom" id="Version Control" order="1" />
       <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
@@ -489,6 +576,7 @@
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="10" />
       <window_info anchor="bottom" id="Build" order="11" weight="0.32964823" />
+      <window_info anchor="bottom" id="Inspection Results" order="12" weight="0.32964823" />
       <window_info anchor="right" id="Palette&#9;" order="0" />
       <window_info anchor="right" id="Maven" order="1" weight="0.3296875" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
@@ -531,8 +619,10 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="OFFER_MOVE_TO_ANOTHER_CHANGELIST_ON_PARTIAL_COMMIT" value="true" />
     <MESSAGE value="Reasons are now sortable" />
-    <option name="LAST_COMMIT_MESSAGE" value="Reasons are now sortable" />
+    <MESSAGE value="Upload Project with Kotlin&#10;Improve Code" />
+    <option name="LAST_COMMIT_MESSAGE" value="Upload Project with Kotlin&#10;Improve Code" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/settings.grade">
@@ -568,27 +658,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/de/tutorialwork/utils/Metrics.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="32" lean-forward="true" selection-start-line="32" selection-end-line="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/de/tutorialwork/commands/ProfessionalBans.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/de/tutorialwork/utils/BCrypt.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1451">
-          <caret line="291" column="31" selection-start-line="291" selection-start-column="31" selection-end-line="291" selection-end-column="31" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/de/tutorialwork/utils/Metrics.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/de/tutorialwork/commands/ProfessionalBans.kt" />
+    <entry file="file://$PROJECT_DIR$/src/main/java/de/tutorialwork/utils/BCrypt.kt" />
     <entry file="jar://C:/Program Files (x86)/Java/jdk1.8.0_201/src.zip!/java/lang/IllegalStateException.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="220">
@@ -617,17 +689,68 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/RandomString.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/RandomString.kt" />
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.velocitypowered/velocity-api/1.0.0-SNAPSHOT/c09808694fdcc5f20e860688c240a03280ee3648/velocity-api-1.0.0-SNAPSHOT-sources.jar!/com/velocitypowered/api/command/CommandManager.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="5" column="75" selection-start-line="5" selection-start-column="75" selection-end-line="5" selection-end-column="75" />
+        <state relative-caret-position="260">
+          <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/LogManager.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Reports.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="320">
-          <caret line="16" column="8" selection-start-line="16" selection-start-column="8" selection-end-line="16" selection-end-column="8" />
+        <state relative-caret-position="300">
+          <caret line="15" column="6" selection-start-line="15" selection-start-column="6" selection-end-line="15" selection-end-column="6" />
+          <folding>
+            <element signature="e#34#532#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/SupportChat.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="280">
+          <caret line="14" column="6" selection-start-line="14" selection-start-column="6" selection-end-line="14" selection-end-column="6" />
+          <folding>
+            <element signature="e#34#471#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebAccount.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="260">
+          <caret line="13" column="6" selection-start-line="13" selection-start-column="6" selection-end-line="13" selection-end-column="6" />
+          <folding>
+            <element signature="e#34#416#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebVerify.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="180">
+          <caret line="9" column="6" selection-start-line="9" selection-start-column="6" selection-end-line="9" selection-end-column="6" />
+          <folding>
+            <element signature="e#34#272#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BCrypt.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPManager.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="41" column="54" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="54" />
         </state>
       </provider>
     </entry>
@@ -645,224 +768,150 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/Global.kt">
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-api/1.14-SNAPSHOT/974d021f90acb69ec46ea688d627b92f188489cd/bungeecord-api-1.14-SNAPSHOT-sources.jar!/net/md_5/bungee/api/CommandSender.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="7" selection-start-line="7" selection-end-line="7" />
-          <folding>
-            <element signature="e#25#104#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.velocitypowered/velocity-api/1.0.0-SNAPSHOT/c09808694fdcc5f20e860688c240a03280ee3648/velocity-api-1.0.0-SNAPSHOT-sources.jar!/com/velocitypowered/api/command/CommandManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="13" column="7" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/build.gradle">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="37" column="25" lean-forward="true" selection-start-line="37" selection-start-column="25" selection-end-line="37" selection-end-column="25" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Blacklist.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="14" column="15" lean-forward="true" selection-start-line="14" selection-start-column="15" selection-end-line="14" selection-end-column="45" />
-          <folding>
-            <element signature="e#34#438#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebVerify.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#272#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/WebAccount.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#416#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Unban.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#392#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/SupportChat.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#471#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Reports.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#532#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Report.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#540#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Kick.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#536#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Check.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
-          <folding>
-            <element signature="e#34#259#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPManager.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="41" column="54" selection-start-line="41" selection-start-column="48" selection-end-line="41" selection-end-column="54" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="351">
-          <caret line="40" column="76" selection-start-line="40" selection-start-column="76" selection-end-line="40" selection-end-column="76" />
-          <folding>
-            <element signature="e#34#577#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="40">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#511#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Ban.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="331">
-          <caret line="148" column="62" selection-start-line="148" selection-start-column="62" selection-end-line="148" selection-end-column="62" />
-          <folding>
-            <element signature="e#34#400#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Chat.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="720">
-          <caret line="47" column="43" selection-start-line="47" selection-start-column="43" selection-end-line="47" selection-end-column="43" />
-          <folding>
-            <element signature="e#34#319#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Login.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="21">
-          <caret line="2" selection-start-line="2" selection-end-line="2" />
-          <folding>
-            <element signature="e#34#595#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="531">
+          <caret line="54" column="7" lean-forward="true" selection-start-line="54" selection-start-column="7" selection-end-line="54" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Quit.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="8" column="6" selection-start-line="8" selection-start-column="6" selection-end-line="8" selection-end-column="6" />
+        <state relative-caret-position="180">
+          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
           <folding>
             <element signature="e#34#250#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/main/Main.kt">
+    <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="691">
-          <caret line="214" column="33" selection-start-line="214" selection-start-column="33" selection-end-line="214" selection-end-column="33" />
-          <folding>
-            <element signature="e#30#661#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="380">
+          <caret line="77" column="9" lean-forward="true" selection-start-line="77" selection-start-column="9" selection-end-line="77" selection-end-column="9" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Check.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="531">
-          <caret line="365" column="24" selection-start-line="365" selection-start-column="24" selection-end-line="365" selection-end-column="24" />
-          <folding>
-            <element signature="e#31#236#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="120">
+          <caret line="14" column="30" selection-start-line="14" selection-start-column="30" selection-end-line="14" selection-end-column="30" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BCrypt.java">
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="5" column="3" selection-start-line="5" selection-start-column="3" selection-end-line="5" selection-end-column="3" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="480">
+          <caret line="36" column="50" selection-start-line="36" selection-start-column="50" selection-end-line="36" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Blacklist.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="834">
+          <caret line="122" column="4" selection-start-line="122" selection-start-column="4" selection-end-line="122" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.md-5/bungeecord-chat/1.14-SNAPSHOT/330920db045e2a5dbada13b94501ca59840f813/bungeecord-chat-1.14-SNAPSHOT-sources.jar!/net/md_5/bungee/api/ChatColor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="20">
+          <caret line="15" column="7" lean-forward="true" selection-start-line="15" selection-start-column="7" selection-end-line="15" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/Functions.kt">
       <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="420">
+          <caret line="25" column="36" selection-start-line="25" selection-start-column="36" selection-end-line="25" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/Global.kt">
+      <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="260">
-          <caret line="13" column="40" selection-start-line="13" selection-start-column="40" selection-end-line="13" selection-end-column="40" />
+          <caret line="21" column="15" selection-start-line="21" selection-start-column="4" selection-end-line="21" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/main/Main.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="201" column="16" lean-forward="true" selection-start-line="201" selection-start-column="16" selection-end-line="201" selection-end-column="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/LogManager.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="20" column="68" lean-forward="true" selection-start-line="20" selection-start-column="68" selection-end-line="20" selection-end-column="68" />
           <folding>
-            <element signature="e#31#118#0" expanded="true" />
+            <element signature="e#31#103#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Report.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="474">
+          <caret line="51" column="64" lean-forward="true" selection-start-line="51" selection-start-column="64" selection-end-line="51" selection-end-column="64" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Unban.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="434">
+          <caret line="48" column="47" selection-start-line="48" selection-start-column="47" selection-end-line="48" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/ActionType.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="674">
+          <caret line="44" column="5" lean-forward="true" selection-start-line="44" selection-start-column="5" selection-end-line="44" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Kick.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="605">
+          <caret line="66" column="95" lean-forward="true" selection-start-line="66" selection-start-column="95" selection-end-line="66" selection-end-column="95" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Chat.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="82" column="47" selection-start-line="82" selection-start-column="47" selection-end-line="82" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="211">
+          <caret line="29" column="36" selection-start-line="29" selection-start-column="36" selection-end-line="29" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/listener/Login.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="39" column="64" selection-start-line="39" selection-start-column="64" selection-end-line="39" selection-end-column="64" />
+          <caret line="40" column="120" selection-start-line="40" selection-start-column="120" selection-end-line="40" selection-end-column="120" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Ban.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="551">
+          <caret line="50" column="67" lean-forward="true" selection-start-line="50" selection-start-column="67" selection-end-line="50" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/BanManager.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="400">
+          <caret line="402" selection-start-line="402" selection-end-line="402" />
         </state>
       </provider>
     </entry>

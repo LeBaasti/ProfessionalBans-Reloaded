@@ -2,6 +2,7 @@ package de.tutorialwork.commands
 
 import de.tutorialwork.console
 import de.tutorialwork.main.Main
+import de.tutorialwork.prefix
 import de.tutorialwork.utils.BanManager
 import de.tutorialwork.utils.LogManager
 import net.md_5.bungee.api.CommandSender
@@ -42,7 +43,7 @@ class Reports(name: String) : Command(name) {
                         }
                         sender.sendMessage("§8[]===================================[]")
                     } else {
-                        sender.sendMessage(Main.prefix + "§cEs sind derzeit keine Reports offen")
+                        sender.sendMessage(prefix + "§cEs sind derzeit keine Reports offen")
                     }
                 } else if (args[0].equals("jump", ignoreCase = true)) {
                     val target = ProxyServer.getInstance().getPlayer(args[1])
@@ -51,17 +52,17 @@ class Reports(name: String) : Command(name) {
                         val id = Integer.parseInt(args[2])
                         BanManager.setReportDone(id)
                         BanManager.setReportTeamUUID(id, sender.uniqueId.toString())
-                        sender.sendMessage(Main.prefix + "Du hast den Report von §e§l" + BanManager.getNameByReportID(id) + " §7wegen §c§l" + BanManager.getReasonByReportID(id) + " §aangenommen")
+                        sender.sendMessage(prefix + "Du hast den Report von §e§l" + BanManager.getNameByReportID(id) + " §7wegen §c§l" + BanManager.getReasonByReportID(id) + " §aangenommen")
                         LogManager.createEntry(sender.uniqueId.toString(), null, "REPORT_ACCEPT", id.toString())
                     } else {
-                        sender.sendMessage(Main.prefix + "§cDieser Spieler ist nicht mehr online")
+                        sender.sendMessage(prefix + "§cDieser Spieler ist nicht mehr online")
                     }
                 }
             } else {
                 sender.sendMessage(Main.noPerms)
             }
         } else {
-            console.sendMessage(Main.prefix + "§e§lReports §7sind nur als Spieler verfügbar")
+            console.sendMessage(prefix + "§e§lReports §7sind nur als Spieler verfügbar")
         }
     }
 }

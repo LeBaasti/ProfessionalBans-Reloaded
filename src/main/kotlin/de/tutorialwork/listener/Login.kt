@@ -1,10 +1,10 @@
 package de.tutorialwork.listener
 
 import de.tutorialwork.commands.SupportChat
+import de.tutorialwork.consoleName
 import de.tutorialwork.main.Main
-import de.tutorialwork.utils.BanManager
-import de.tutorialwork.utils.IPManager
-import de.tutorialwork.utils.UUIDFetcher
+import de.tutorialwork.prefix
+import de.tutorialwork.utils.*
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.event.PostLoginEvent
 import net.md_5.bungee.api.event.PreLoginEvent
@@ -16,7 +16,7 @@ import net.md_5.bungee.event.EventHandler
 import java.io.File
 import java.io.IOException
 
-class Login : Listener {
+object Login : Listener {
 
     @EventHandler
     fun onPreLoginEvent(event: PreLoginEvent) {
@@ -25,7 +25,7 @@ class Login : Listener {
         /*val ip = event.connection.address.hostString*/
         BanManager.createPlayer(uuid, event.connection.name)
         IPManager.insertIP(ip, uuid)
-        val config = File(Main.instance.dataFolder, "config.yml")
+        val config = File(Main.instance.dataFolder, "configFile.yml")
         try {
             val cfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(config)
             if (cfg.getBoolean("VPN.BLOCKED")) {
@@ -37,14 +37,14 @@ class Login : Listener {
                         }
                         if (cfg.getBoolean("VPN.BAN")) {
                             val id = cfg.getInt("VPN.BANID")
-                            BanManager.ban(uuid, id, "KONSOLE", Main.increaseValue, Main.increaseBans)
-                            BanManager.sendNotify("IPBAN", event.connection.address.hostString, "KONSOLE", BanManager.getReasonByID(id))
+                            BanManager.ban(uuid, id, consoleName, Main.increaseValue, Main.increaseBans)
+                            ActionType.IpBan(id).sendNotify(event.connection.address.hostString, consoleName)
                             event.isCancelled = true
                             if (BanManager.getRAWEnd(uuid) == -1L) {
-                                event.cancelReason = ChatColor.translateAlternateColorCodes('&', cfg.getString("LAYOUT.IPBAN").replace("%grund%", BanManager.getReasonByID(id)!!))
+                                event.cancelReason = ChatColor.translateAlternateColorCodes('&', cfg.getString("LAYOUT.IPBAN").replace("%grund%", id.reason!!))
                             } else {
                                 var MSG = cfg.getString("LAYOUT.TEMPIPBAN")
-                                MSG = MSG.replace("%grund%", BanManager.getReasonString(uuid)!!)
+                                MSG = MSG.replace("%grund%", uuid.reasonString!!)
                                 MSG = MSG.replace("%dauer%", BanManager.getEnd(uuid))
                                 event.cancelReason = ChatColor.translateAlternateColorCodes('&', MSG)
                             }
@@ -87,12 +87,12 @@ class Login : Listener {
 
                 if (BanManager.getRAWEnd(uuid) == -1L) {
                     event.isCancelled = true
-                    event.cancelReason = ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.BAN").replace("%grund%", BanManager.getReasonString(uuid)!!))
+                    event.cancelReason = ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.BAN").replace("%grund%", uuid.reasonString!!))
                 } else {
                     if (System.currentTimeMillis() < BanManager.getRAWEnd(uuid) ?: 0) {
                         event.isCancelled = true
                         var msg = configcfg.getString("LAYOUT.TEMPBAN")
-                        msg = msg.replace("%grund%", BanManager.getReasonString(uuid)!!)
+                        msg = msg.replace("%grund%", uuid.reasonString!!)
                         msg = msg.replace("%dauer%", BanManager.getEnd(uuid))
                         event.cancelReason = ChatColor.translateAlternateColorCodes('&', msg)
                     } else {
@@ -113,12 +113,12 @@ class Login : Listener {
         val p = e.player
         if (p.hasPermission("professionalbans.reports") || p.hasPermission("professionalbans.*")) {
             if (BanManager.countOpenReports() != 0) {
-                p.sendMessage(Main.prefix + "Derzeit sind noch Â§eÂ§l" + BanManager.countOpenReports() + " Reports Â§7offen")
+                p.sendMessage(prefix + "Derzeit sind noch Â§eÂ§l" + BanManager.countOpenReports() + " Reports Â§7offen")
             }
         }
         if (p.hasPermission("professionalbans.supportchat") || p.hasPermission("professionalbans.*")) {
             if (SupportChat.openchats.size != 0) {
-                p.sendMessage(Main.prefix + "Derzeit sind noch Â§eÂ§l" + SupportChat.openchats.size + " Â§7Support Chat Anfragen Â§aoffen")
+                p.sendMessage(prefix + "Derzeit sind noch Â§eÂ§l" + SupportChat.openchats.size + " Â§7Support Chat Anfragen Â§aoffen")
             }
         }
         //Update Check

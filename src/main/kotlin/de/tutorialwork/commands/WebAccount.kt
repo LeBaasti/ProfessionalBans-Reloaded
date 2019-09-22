@@ -1,10 +1,8 @@
 package de.tutorialwork.commands
 
 import de.tutorialwork.main.Main
-import de.tutorialwork.utils.BCrypt
-import de.tutorialwork.utils.BanManager
-import de.tutorialwork.utils.LogManager
-import de.tutorialwork.utils.UUIDFetcher
+import de.tutorialwork.prefix
+import de.tutorialwork.utils.*
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.connection.ProxiedPlayer
@@ -17,11 +15,11 @@ class WebAccount(name: String) : Command(name) {
         if (sender is ProxiedPlayer) {
             if (sender.hasPermission("professionalbans.webaccount") || sender.hasPermission("professionalbans.*")) {
                 if (args.isEmpty() || args.size == 1) {
-                    sender.sendMessage(Main.prefix + "/webaccount <erstellen, löschen> <Spieler> [Rang]")
+                    sender.sendMessage(prefix + "/webaccount <erstellen, löschen> <Spieler> [Rang]")
                 } else {
                     if (args[0].equals("erstellen", ignoreCase = true)) {
                         if (args.size == 2) {
-                            sender.sendMessage(Main.prefix + "Du musst noch ein Rang des Accounts angeben §4Admin§7, §cMod§7, §9Sup")
+                            sender.sendMessage(prefix + "Du musst noch ein Rang des Accounts angeben §4Admin§7, §cMod§7, §9Sup")
                             return
                         }
                         val uuid = UUIDFetcher.getUUID(args[1]) ?: return
@@ -33,45 +31,45 @@ class WebAccount(name: String) : Command(name) {
                                     val hash = BCrypt.hashpw(rowPW, BCrypt.gensalt())
                                     when {
                                         args[2].equals("Admin", ignoreCase = true) -> {
-                                            BanManager.createWebAccount(uuid, BanManager.getNameByUUID(uuid).toString(), 3, hash)
-                                            sender.sendMessage(Main.prefix + "Ein §4§lAdmin §7Account für §e§l" + BanManager.getNameByUUID(uuid) + " §7wurde §aerstellt")
+                                            BanManager.createWebAccount(uuid, uuid.name.toString(), 3, hash)
+                                            sender.sendMessage(prefix + "Ein §4§lAdmin §7Account für §e§l" + uuid.name + " §7wurde §aerstellt")
                                         }
                                         args[2].equals("Mod", ignoreCase = true) -> {
-                                            BanManager.createWebAccount(uuid, BanManager.getNameByUUID(uuid).toString(), 2, hash)
-                                            sender.sendMessage(Main.prefix + "Ein §c§lMod §7Account für §e§l" + BanManager.getNameByUUID(uuid) + " §7wurde §aerstellt")
+                                            BanManager.createWebAccount(uuid, uuid.name.toString(), 2, hash)
+                                            sender.sendMessage(prefix + "Ein §c§lMod §7Account für §e§l" + uuid.name + " §7wurde §aerstellt")
                                         }
                                         args[2].equals("Sup", ignoreCase = true) -> {
-                                            BanManager.createWebAccount(uuid, BanManager.getNameByUUID(uuid).toString(), 1, hash)
-                                            sender.sendMessage(Main.prefix + "Ein §9§lSup §7Account für §e§l" + BanManager.getNameByUUID(uuid) + " §7wurde §aerstellt")
+                                            BanManager.createWebAccount(uuid, uuid.name.toString(), 1, hash)
+                                            sender.sendMessage(prefix + "Ein §9§lSup §7Account für §e§l" + uuid.name + " §7wurde §aerstellt")
                                         }
                                     }
-                                    target.sendMessage(Main.prefix + "§e§l" + sender.name + " §7hat einen Webaccount für dich erstellt")
-                                    target.sendMessage(Main.prefix + "Passwort: §c§l" + rowPW)
+                                    target.sendMessage(prefix + "§e§l" + sender.name + " §7hat einen Webaccount für dich erstellt")
+                                    target.sendMessage(prefix + "Passwort: §c§l" + rowPW)
                                     LogManager.createEntry(uuid.toString(), sender.uniqueId.toString(), "ADD_WEBACCOUNT", args[2])
                                 } else {
-                                    sender.sendMessage(Main.prefix + "§e§l" + args[1] + " §7ist derzeit nicht online")
+                                    sender.sendMessage(prefix + "§e§l" + args[1] + " §7ist derzeit nicht online")
                                 }
                             } else {
-                                sender.sendMessage(Main.prefix + "§cDieser Spieler hat bereits einen Zugang zum Webinterface")
+                                sender.sendMessage(prefix + "§cDieser Spieler hat bereits einen Zugang zum Webinterface")
                             }
                         } else {
-                            sender.sendMessage(Main.prefix + "§cDieser Spieler hat den Server noch nie betreten")
+                            sender.sendMessage(prefix + "§cDieser Spieler hat den Server noch nie betreten")
                         }
                     } else if (args[0].equals("löschen", ignoreCase = true)) {
                         val uuid = UUIDFetcher.getUUID(args[1]) ?: return
                         if (BanManager.playerExists(uuid)) {
                             if (BanManager.webaccountExists(uuid)) {
                                 BanManager.deleteWebAccount(uuid)
-                                sender.sendMessage(Main.prefix + "Der Zugang von dem Spieler §e§l" + BanManager.getNameByUUID(uuid) + " §7wurde erfolgreich §agelöscht")
+                                sender.sendMessage(prefix + "Der Zugang von dem Spieler §e§l" + uuid.name + " §7wurde erfolgreich §agelöscht")
                                 LogManager.createEntry(uuid.toString(), sender.uniqueId.toString(), "DEL_WEBACCOUNT", null)
                             } else {
-                                sender.sendMessage(Main.prefix + "§cDieser Spieler hat keinen Zugang zum Webinterface")
+                                sender.sendMessage(prefix + "§cDieser Spieler hat keinen Zugang zum Webinterface")
                             }
                         } else {
-                            sender.sendMessage(Main.prefix + "§cDieser Spieler hat den Server noch nie betreten")
+                            sender.sendMessage(prefix + "§cDieser Spieler hat den Server noch nie betreten")
                         }
                     } else {
-                        sender.sendMessage(Main.prefix + "§cDiese Aktion ist nicht gültig")
+                        sender.sendMessage(prefix + "§cDiese Aktion ist nicht gültig")
                     }
                 }
             } else {

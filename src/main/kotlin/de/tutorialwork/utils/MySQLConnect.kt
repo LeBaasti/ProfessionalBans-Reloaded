@@ -1,7 +1,7 @@
 package de.tutorialwork.utils
 
 import de.tutorialwork.console
-import de.tutorialwork.main.Main
+import de.tutorialwork.prefix
 import java.sql.Connection
 import java.sql.DriverManager
 import java.sql.ResultSet
@@ -23,9 +23,9 @@ class MySQLConnect(host: String, database: String, user: String, password: Strin
     private fun connect() {
         try {
             con = DriverManager.getConnection("jdbc:mysql://$HOST:3306/$DATABASE?autoReconnect=true", USER, PASSWORD)
-            console.sendMessage(Main.prefix + "§aDie Verbindung mit der MySQL Datenbank wurde erfolgreich hergestellt")
+            console.sendMessage(prefix + "§aDie Verbindung mit der MySQL Datenbank wurde erfolgreich hergestellt")
         } catch (e: SQLException) {
-            console.sendMessage(Main.prefix + "§cDie Verbindung mit der MySQL Datenbank ist fehlgeschlagen: §4" + e.message)
+            console.sendMessage(prefix + "§cDie Verbindung mit der MySQL Datenbank ist fehlgeschlagen: §4" + e.message)
         }
 
     }
