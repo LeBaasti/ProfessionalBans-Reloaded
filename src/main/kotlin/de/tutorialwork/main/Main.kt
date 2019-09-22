@@ -1,28 +1,15 @@
 package de.tutorialwork.main
 
+import de.tutorialwork.*
 import de.tutorialwork.commands.*
-import de.tutorialwork.config
-import de.tutorialwork.console
 import de.tutorialwork.listener.Chat
 import de.tutorialwork.listener.Login
 import de.tutorialwork.listener.Quit
-import de.tutorialwork.mysql
-import de.tutorialwork.prefix
-import de.tutorialwork.utils.BanManager
-import de.tutorialwork.utils.MySQLConnect
-import de.tutorialwork.utils.reasonString
-import de.tutorialwork.utils.translateColors
-import net.md_5.bungee.api.ChatColor
+import de.tutorialwork.utils.*
 import net.md_5.bungee.api.plugin.Command
 import net.md_5.bungee.api.plugin.Listener
 import net.md_5.bungee.api.plugin.Plugin
-import net.md_5.bungee.config.ConfigurationProvider
-import net.md_5.bungee.config.YamlConfiguration
 import java.io.File
-import java.io.IOException
-import java.net.URL
-import java.net.URLConnection
-import java.util.*
 import java.util.concurrent.TimeUnit
 
 
@@ -39,143 +26,114 @@ class Main : Plugin() {
         registerListeners()
         //Konsolen Nachricht über das Plugin
         proxy.console.apply {
-            sendMessage("§8[]===================================[]")
-            sendMessage("§e§lProfessionalBans §7§oReloaded §8| §7Version: §c$Version")
-            sendMessage("§7Developer: §e§lTutorialwork, LeBaasti")
-            sendMessage("§5YT §7Kanal: §cyoutube.com/Tutorialwork")
-            sendMessage("§8[]===================================[]")
+            msg("§8[]===================================[]")
+            msg("§e§lProfessionalBans §7§oReloaded §8| §7Version: §c$version")
+            msg("§7Developer: §e§lTutorialwork, LeBaasti")
+            msg("§5YT §7Kanal: §cyoutube.com/Tutorialwork")
+            msg("§8[]===================================[]")
         }
 
 
         //Überprüft auf Bans aus dem Webinterface
         proxy.scheduler.schedule(this, {
-            val config = File(Main.instance.dataFolder, "configFile.yml")
-            try {
-                val configcfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(config)
-                for (all in proxy.players) {
-                    val uuid = all.uniqueId
-                    if (BanManager.isBanned(uuid)) {
-                        if (BanManager.getRAWEnd(uuid) == -1L) {
-                            all.disconnect(ChatColor.translateAlternateColorCodes('&', configcfg.getString("LAYOUT.BAN")
-                                    .replace("%grund%", uuid.reasonString)))
-                        } else {
-                            var msg = configcfg.getString("LAYOUT.TEMPBAN")
-                            msg = msg.replace("%grund%", uuid.reasonString)
-                            msg = msg.replace("%dauer%", BanManager.getEnd(uuid))
-                            all.disconnect(ChatColor.translateAlternateColorCodes('&', msg))
-                        }
-                    }
+            for (all in proxy.players) {
+                val uuid = all.uniqueId
+                if (uuid.isBanned) {
+                    if (uuid.rawEnd == -1L) {
+                        all.kick(config.getString("LAYOUT.BAN")
+                                .replace("%grund%", uuid.reasonString).translateColors())
+                    } else all.sendTemp("BAN")
                 }
-                ConfigurationProvider.getProvider(YamlConfiguration::class.java).save(configcfg, config)
-            } catch (e: IOException) {
-                e.printStackTrace()
             }
+            saveConfig()
         }, 5, 5, TimeUnit.SECONDS)
     }
 
     private fun config() {
-        if (!dataFolder.exists()) dataFolder.mkdir()
-        val file = File(dataFolder.path, "mysql.yml")
-        val config = File(dataFolder.path, "configFile.yml")
-        val blacklistfile = File(dataFolder.path, "blacklist.yml")
-        try {
-            if (!file.exists()) {
-                file.createNewFile()
-                val mysql = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(file)
-                mysql.set("HOST", "localhost")
-                mysql.set("DATENBANK", "Bans")
-                mysql.set("USER", "root")
-                mysql.set("PASSWORT", "deinpasswort")
-                ConfigurationProvider.getProvider(YamlConfiguration::class.java).save(mysql, file)
-            }
-            if (!config.exists()) {
-                config.createNewFile()
-                val configcfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(config)
-                configcfg.set("PREFIX", "&e&lBANS &8• &7")
-                configcfg.set("LAYOUT.BAN", "&8[]===================================[] \n\n &4&lDu wurdest GEBANNT \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
-                configcfg.set("LAYOUT.KICK", "&8[]===================================[] \n\n &e&lDu wurdest GEKICKT \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
-                configcfg.set("LAYOUT.TEMPBAN", "&8[]===================================[] \n\n &4&lDu wurdest temporär GEBANNT \n\n &eGrund: §c§l%grund% \n &eRestzeit: &c&l%dauer% \n\n&8[]===================================[]")
-                configcfg.set("LAYOUT.MUTE", "&8[]===================================[] \n\n &4&lDu wurdest GEMUTET \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
-                configcfg.set("LAYOUT.TEMPMUTE", "&8[]===================================[] \n\n &4&lDu wurdest temporär GEMUTET \n\n &eGrund: §c§l%grund% \n &eRestzeit: &c&l%dauer% \n\n&8[]===================================[]")
-                configcfg.set("LAYOUT.IPBAN", "&8[]===================================[] \n\n &4&lDeine IP-Adresse wurde GEBANNT \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
-                configcfg.set("LAYOUT.TEMPIPBAN", "&8[]===================================[] \n\n &4&lDeine IP-Adresse wurde temporär GEBANNT \n\n &eGrund: §c§l%grund% \n &eRestzeit: &c&l%dauer% \n\n&8[]===================================[]")
-                configcfg.set("VPN.BLOCKED", true)
-                configcfg.set("VPN.KICK", true)
-                configcfg.set("VPN.KICKMSG", "&7Das benutzen einer &4VPN &7ist auf unserem Netzwerk &cUNTERSAGT")
-                configcfg.set("VPN.BAN", false)
-                configcfg.set("VPN.BANID", 0)
-                ipwhitelist.add("8.8.8.8")
-                configcfg.set("VPN.WHITELIST", ipwhitelist)
-                configcfg.set("VPN.APIKEY", "Go to https://proxycheck.io/dashboard and register with your email and enter here your API Key")
-                configcfg.set("REPORTS.ENABLED", true)
-                reportreasons.add("Hacking")
-                reportreasons.add("Verhalten")
-                reportreasons.add("Teaming")
-                reportreasons.add("TPA-Falle")
-                reportreasons.add("Werbung")
-                configcfg.set("REPORTS.REASONS", reportreasons)
-                configcfg.set("REPORTS.OFFLINEREPORTS", false)
-                configcfg.set("CHATLOG.ENABLED", true)
-                configcfg.set("CHATLOG.URL", "DeinServer.net/BanWebinterface/public/chatlog.php?id=")
-                configcfg.set("AUTOMUTE.ENABLED", false)
-                configcfg.set("AUTOMUTE.AUTOREPORT", true)
-                //config.set("AUTOMUTE.AUTOREPORT.REASON", "Automatischer Report");
-                configcfg.set("AUTOMUTE.MUTEID", 0)
-                configcfg.set("AUTOMUTE.ADMUTEID", 0)
-                configcfg.set("BANTIME-INCREASE.ENABLED", true)
-                configcfg.set("BANTIME-INCREASE.PERCENTRATE", 50)
-                ConfigurationProvider.getProvider(YamlConfiguration::class.java).save(configcfg, config)
-            } else {
-                val configcfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(config)
-                if (configcfg.getBoolean("VPN.KICK") && configcfg.getBoolean("VPN.BAN")) {
-                    console.sendMessage("§8[]===================================[]")
-                    console.sendMessage("§c§lSINNLOSE EINSTELLUNG ENTDECKT")
-                    console.sendMessage("§7Wenn ein Spieler mit einer VPN das Netzwerk betritt kann er nicht gekickt UND gebannt werden.")
-                    console.sendMessage("§4§lÜberprüfe die VPN Einstellung in der CONFIG.YML")
-                    console.sendMessage("§8[]===================================[]")
-                    //Setze VPN Einstellung zurück!
-                    configcfg.set("VPN.BLOCKED", true)
-                    configcfg.set("VPN.KICK", true)
-                    configcfg.set("VPN.KICKMSG", "&7Das benutzen einer &4VPN &7ist auf unserem Netzwerk &cUNTERSAGT")
-                    configcfg.set("VPN.BAN", false)
-                    configcfg.set("VPN.BANID", 0)
-                }
-                for (reasons in configcfg.getStringList("REPORTS.REASONS")) {
-                    reportreasons.add(reasons.toUpperCase())
-                }
-                for (ips in configcfg.getStringList("VPN.WHITELIST")) {
-                    ipwhitelist.add(ips)
-                }
-                prefix = configcfg.getString("PREFIX").translateColors()
-                increaseBans = configcfg.getBoolean("BANTIME-INCREASE.ENABLED")
-                increaseValue = configcfg.getInt("BANTIME-INCREASE.PERCENTRATE")
-                if (configcfg.getString("VPN.APIKEY").length == 27) {
-                    APIKey = configcfg.getString("VPN.APIKEY")
-                }
-                ConfigurationProvider.getProvider(YamlConfiguration::class.java).save(configcfg, config)
-            }
-            if (!blacklistfile.exists()) blacklistfile.createNewFile()
-            val blacklistcfg = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(blacklistfile)
-            for (congigstr in blacklistcfg.getStringList("BLACKLIST")) blacklist.add(congigstr)
-            for (congigstr in blacklistcfg.getStringList("ADBLACKLIST")) adblacklist.add(congigstr)
-            for (congigstr in blacklistcfg.getStringList("ADWHITELIST")) adwhitelist.add(congigstr.toUpperCase())
-        } catch (e: IOException) {
-            e.printStackTrace()
+        if (!dataFolder.exists()) dataFolder.mkdirs()
+        if (!mysqlFile.exists()) {
+            mysqlFile.createNewFile()
+            mysqlConfig.set("HOST", "localhost")
+            mysqlConfig.set("DATENBANK", "Bans")
+            mysqlConfig.set("USER", "root")
+            mysqlConfig.set("PASSWORT", "deinpasswort")
+            saveConfig(mysqlConfig, mysqlFile)
         }
-
+        if (!configFile.exists()) {
+            configFile.createNewFile()
+            config.set("PREFIX", "&e&lBANS &8• &7")
+            config.set("LAYOUT.BAN", "&8[]===================================[] \n\n &4&lDu wurdest GEBANNT \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
+            config.set("LAYOUT.KICK", "&8[]===================================[] \n\n &e&lDu wurdest GEKICKT \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
+            config.set("LAYOUT.TEMPBAN", "&8[]===================================[] \n\n &4&lDu wurdest temporär GEBANNT \n\n &eGrund: §c§l%grund% \n &eRestzeit: &c&l%dauer% \n\n&8[]===================================[]")
+            config.set("LAYOUT.MUTE", "&8[]===================================[] \n\n &4&lDu wurdest GEMUTET \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
+            config.set("LAYOUT.TEMPMUTE", "&8[]===================================[] \n\n &4&lDu wurdest temporär GEMUTET \n\n &eGrund: §c§l%grund% \n &eRestzeit: &c&l%dauer% \n\n&8[]===================================[]")
+            config.set("LAYOUT.IPBAN", "&8[]===================================[] \n\n &4&lDeine IP-Adresse wurde GEBANNT \n\n &eGrund: §c§l%grund% \n\n&8[]===================================[]")
+            config.set("LAYOUT.TEMPIPBAN", "&8[]===================================[] \n\n &4&lDeine IP-Adresse wurde temporär GEBANNT \n\n &eGrund: §c§l%grund% \n &eRestzeit: &c&l%dauer% \n\n&8[]===================================[]")
+            config.set("VPN.BLOCKED", true)
+            config.set("VPN.KICK", true)
+            config.set("VPN.KICKMSG", "&7Das benutzen einer &4VPN &7ist auf unserem Netzwerk &cUNTERSAGT")
+            config.set("VPN.BAN", false)
+            config.set("VPN.BANID", 0)
+            ipwhitelist.add("8.8.8.8")
+            config.set("VPN.WHITELIST", ipwhitelist)
+            config.set("VPN.APIKEY", "Go to https://proxycheck.io/dashboard and register with your email and enter here your API Key")
+            config.set("REPORTS.ENABLED", true)
+            reportreasons.add("Hacking")
+            reportreasons.add("Verhalten")
+            reportreasons.add("Teaming")
+            reportreasons.add("TPA-Falle")
+            reportreasons.add("Werbung")
+            config.set("REPORTS.REASONS", reportreasons)
+            config.set("REPORTS.OFFLINEREPORTS", false)
+            config.set("CHATLOG.ENABLED", true)
+            config.set("CHATLOG.URL", "DeinServer.net/BanWebinterface/public/chatlog.php?id=")
+            config.set("AUTOMUTE.ENABLED", false)
+            config.set("AUTOMUTE.AUTOREPORT", true)
+            //config.set("AUTOMUTE.AUTOREPORT.REASON", "Automatischer Report");
+            config.set("AUTOMUTE.MUTEID", 0)
+            config.set("AUTOMUTE.ADMUTEID", 0)
+            config.set("BANTIME-INCREASE.ENABLED", true)
+            config.set("BANTIME-INCREASE.PERCENTRATE", 50)
+            saveConfig()
+        } else {
+            if (config.getBoolean("VPN.KICK") && config.getBoolean("VPN.BAN")) {
+                console.msg("§8[]===================================[]")
+                console.msg("§c§lSINNLOSE EINSTELLUNG ENTDECKT")
+                console.msg("§7Wenn ein Spieler mit einer VPN das Netzwerk betritt kann er nicht gekickt UND gebannt werden.")
+                console.msg("§4§lÜberprüfe die VPN Einstellung in der CONFIG.YML")
+                console.msg("§8[]===================================[]")
+                //Setze VPN Einstellung zurück!
+                config.set("VPN.BLOCKED", true)
+                config.set("VPN.KICK", true)
+                config.set("VPN.KICKMSG", "&7Das benutzen einer &4VPN &7ist auf unserem Netzwerk &cUNTERSAGT")
+                config.set("VPN.BAN", false)
+                config.set("VPN.BANID", 0)
+            }
+            for (reasons in config.getStringList("REPORTS.REASONS")) reportreasons.add(reasons.toUpperCase())
+            for (ips in config.getStringList("VPN.WHITELIST")) ipwhitelist.add(ips)
+            prefix = config.getString("PREFIX").translateColors()
+            increaseBans = config.getBoolean("BANTIME-INCREASE.ENABLED")
+            increaseValue = config.getInt("BANTIME-INCREASE.PERCENTRATE")
+            if (config.getString("VPN.APIKEY").length == 27) {
+                APIKey = config.getString("VPN.APIKEY")
+            }
+            saveConfig()
+        }
+        if (!blacklistFile.exists()) blacklistFile.createNewFile()
+        blacklistConfig.apply {
+            blacklist.addAll(getStringList("BLACKLIST"))
+            adblacklist.addAll(getStringList("ADBLACKLIST"))
+            adwhitelist.addAll(getStringList("ADWHITELIST").map { it.toUpperCase() })
+        }
     }
 
     private fun mySQL() {
-        try {
-            val file = File(dataFolder.path, "mysql.yml")
-            val mysql = ConfigurationProvider.getProvider(YamlConfiguration::class.java).load(file)
-            MySQLConnect.HOST = mysql.getString("HOST")
-            MySQLConnect.DATABASE = mysql.getString("DATENBANK")
-            MySQLConnect.USER = mysql.getString("USER")
-            MySQLConnect.PASSWORD = mysql.getString("PASSWORT")
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
+        val file = File(dataFolder.path, "mysql.yml")
+        val mysqlFile = configProvider.load(file)
+        MySQLConnect.HOST = mysqlFile.getString("HOST")
+        MySQLConnect.DATABASE = mysqlFile.getString("DATENBANK")
+        MySQLConnect.USER = mysqlFile.getString("USER")
+        MySQLConnect.PASSWORD = mysqlFile.getString("PASSWORT")
 
         mysql = MySQLConnect(MySQLConnect.HOST, MySQLConnect.DATABASE, MySQLConnect.USER, MySQLConnect.PASSWORD)
         mysql.update("CREATE TABLE IF NOT EXISTS accounts(UUID varchar(64) UNIQUE, USERNAME varchar(255), PASSWORD varchar(255), RANK int(11), GOOGLE_AUTH varchar(255), AUTHCODE varchar(255));")
@@ -201,12 +159,12 @@ class Main : Plugin() {
         config
         arrayOf(
                 Ban,
-                Unban("unban"),
+                Unban("unBan"),
                 Kick("kick"),
                 WebAccount("webaccount"),
                 Check("check"),
                 IPBan,
-                Blacklist("blacklist"),
+                Blacklist(),
                 WebVerify("webverify"),
                 SupportChat("support")
         ).forEach(::register)
@@ -225,38 +183,7 @@ class Main : Plugin() {
             Quit
     ).forEach(::register)
 
-    companion object {
-
-        lateinit var instance: Main
-
-        var noPerms = "$prefix§cDu hast keine Berechtigung diesen Befehl zu nutzen"
-        var reportreasons = mutableListOf<String>()
-
-        var blacklist = ArrayList<String>()
-        var adblacklist = ArrayList<String>()
-        var adwhitelist = ArrayList<String>()
-        var ipwhitelist = ArrayList<String>()
-        var increaseBans = true
-
-        var increaseValue: Int = 50
-        var APIKey: String? = null
-
-        //==============================================
-        //Plugin Informationen
-        var Version = "2.4"
-
-        fun callURL(myURL: String): String {
-            val url = URL(myURL)
-            val urlConn: URLConnection? = url.openConnection()
-            if (urlConn != null) urlConn.readTimeout = 60 * 1000
-            val inputStream = urlConn?.getInputStream() ?: return ""
-            return inputStream.reader().readText()
-        }
-
-    }
-
     private fun register(command: Command) = proxy.pluginManager.registerCommand(this, command)
-
     private fun register(listener: Listener) = proxy.pluginManager.registerListener(this, listener)
 
 }

@@ -6,6 +6,6 @@
     <file url="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Chatlog.kt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/Check.kt" charset="windows-1252" />
     <file url="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/commands/IPBan.kt" charset="windows-1252" />
-    <file url="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPManager.kt" charset="windows-1252" />
+    <file url="file://$PROJECT_DIR$/src/main/kotlin/de/tutorialwork/utils/IPFunctions.kt" charset="windows-1252" />
   </component>
 </project>

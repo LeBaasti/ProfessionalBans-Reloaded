@@ -23,21 +23,15 @@ class MySQLConnect(host: String, database: String, user: String, password: Strin
     private fun connect() {
         try {
             con = DriverManager.getConnection("jdbc:mysql://$HOST:3306/$DATABASE?autoReconnect=true", USER, PASSWORD)
-            console.sendMessage(prefix + "§aDie Verbindung mit der MySQL Datenbank wurde erfolgreich hergestellt")
+            console.msg("$prefix§aDie Verbindung mit der MySQL Datenbank wurde erfolgreich hergestellt")
         } catch (e: SQLException) {
-            console.sendMessage(prefix + "§cDie Verbindung mit der MySQL Datenbank ist fehlgeschlagen: §4" + e.message)
+            console.msg(prefix + "§cDie Verbindung mit der MySQL Datenbank ist fehlgeschlagen: §4" + e.message)
         }
 
     }
 
     fun close() {
-        try {
-            if (con != null) {
-                con!!.close()
-            }
-        } catch (e: SQLException) {
-        }
-
+        con?.close()
     }
 
     fun update(qry: String) {
@@ -49,7 +43,6 @@ class MySQLConnect(host: String, database: String, user: String, password: Strin
             connect()
             System.err.println(e)
         }
-
     }
 
     fun query(qry: String): ResultSet? {

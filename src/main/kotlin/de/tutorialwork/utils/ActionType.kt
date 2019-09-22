@@ -30,9 +30,6 @@ sealed class ActionType {
     }
 
     class Kick(private val reason: String) : ActionType() {
-
-        constructor(id: Int) : this(id.reason)
-
         override val message: String = "§e§l$bannedName §7wurde von §c§l$senderName §cgekickt §7wegen §a$reason"
     }
 
@@ -49,6 +46,18 @@ sealed class ActionType {
     }
 
     class Report(private val reason: String) : ActionType() {
+        override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
+    }
+
+    class Blacklist(private val reason: String) : ActionType() {
+        override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
+    }
+
+    class Chatlog(private val reason: String) : ActionType() {
+        override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
+    }
+
+    class Webaccount(private val reason: String) : ActionType() {
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
     }
 

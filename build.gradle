@@ -52,6 +52,7 @@ configurations {
 }
 
 dependencies {
+    compile fileTree(libsDirName)
     compileOnly 'net.md-5:bungeecord-api:1.14-SNAPSHOT'
     /*compileOnly 'com.velocitypowered:velocity-api:1.0.0-SNAPSHOT'*/
 
@@ -83,7 +84,10 @@ wrapper {
             def lines = file.readLines()
             def list = []
             lines.each { String line ->
-                list += line.replace("ProxyServer.getInstance().getConsole()", "console")
+                list += line.replace("var msg = config.getString(\"LAYOUT.TEMPMUTE\")\n" +
+                        "                        msg = msg.replace(\"%grund%\", uuid.reasonString)\n" +
+                        "                        msg = msg.replace(\"%dauer%\", uuid.endTime)\n" +
+                        "                        p.msg(msg))", "p.sendTempmute()")
             }
             file.write(list.join("\n"), "UTF-8")
         }

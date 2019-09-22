@@ -1,16 +1,14 @@
 package de.tutorialwork.commands
 
-import de.tutorialwork.console
-import de.tutorialwork.prefix
+import de.tutorialwork.*
+import de.tutorialwork.utils.msg
 import net.md_5.bungee.api.CommandSender
-import net.md_5.bungee.api.ProxyServer
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
 import net.md_5.bungee.api.chat.HoverEvent
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
-import java.util.*
 
 class SupportChat(name: String) : Command(name) {
 
@@ -22,45 +20,45 @@ class SupportChat(name: String) : Command(name) {
                         for (key in activechats.keys) {
                             //Key has started the support chat
                             if (key === sender) {
-                                activechats[sender]?.sendMessage(prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
+                                activechats[sender]?.msg(prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
                                 activechats.remove(key)
                             } else {
-                                key.sendMessage(prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
+                                key.msg(prefix + "§e§l" + sender.name + " §7hat den Support Chat §cbeeendet")
                                 activechats.remove(key)
                             }
                         }
-                        sender.sendMessage(prefix + "§cDu hast den Support Chat beendet")
+                        sender.msg("$prefix§cDu hast den Support Chat beendet")
                         return
                     } else {
-                        sender.sendMessage(prefix + "§cDu hast derzeit keinen offenen Support Chat")
+                        sender.msg("$prefix§cDu hast derzeit keinen offenen Support Chat")
                         return
                     }
                 }
             }
-            if (sender.hasPermission("professionalbans.supportchat") || sender.hasPermission("professionalbans.*")) {
+            if (sender.hasPermission("professionalbans.supportchat")) {
                 //Team Member
                 if (args.isNotEmpty()) {
-                    for (all in ProxyServer.getInstance().getPlayers()) {
-                        if (all.getName() == args[0]) {
+                    for (all in players) {
+                        if (all.name == args[0]) {
                             if (openchats.containsKey(all)) {
                                 activechats[all] = sender
                                 openchats.remove(all)
-                                all.sendMessage(prefix + "§e§l" + sender.name + " §7ist jetzt mit dir im Support Chat")
-                                all.sendMessage(prefix + "§8§oDu kannst in den Support Chat schreiben in dem du einfach eine normale Nachricht schreibst")
-                                all.sendMessage(prefix + "§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
-                                sender.sendMessage(prefix + "§e§l" + all.getName() + " §7ist jetzt im Support Chat mit dir")
-                                sender.sendMessage(prefix + "§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
+                                all.msg("""$prefix§e§l${sender.name} §7ist jetzt mit dir im Support Chat""")
+                                all.msg("$prefix§8§oDu kannst in den Support Chat schreiben in dem du einfach eine normale Nachricht schreibst")
+                                all.msg("$prefix§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
+                                sender.msg("""$prefix§e§l${all.name} §7ist jetzt im Support Chat mit dir""")
+                                sender.msg("$prefix§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
                             } else {
-                                sender.sendMessage(prefix + "§cDiese Anfrage ist ausgelaufen")
+                                sender.msg("$prefix§cDiese Anfrage ist ausgelaufen")
                             }
                         }
                     }
                 } else {
-                    if (openchats.size != 0) {
-                        sender.sendMessage("§8[]===================================[]")
+                    if (openchats.isNotEmpty()) {
+                        sender.msg("§8[]===================================[]")
                         var i = 0
-                        for (key in SupportChat.openchats.keys) {
-                            sender.sendMessage("§e§l" + key + " §8• §9" + SupportChat.openchats[key])
+                        for (key in openchats.keys) {
+                            sender.msg("""§e§l$key §8• §9${openchats[key]}""")
                             val tc = TextComponent()
                             tc.text = "§aSupport Chat starten"
                             tc.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/support $key")
@@ -68,20 +66,20 @@ class SupportChat(name: String) : Command(name) {
                             sender.sendMessage(tc)
                             i++
                         }
-                        sender.sendMessage("§8[]===================================[]")
-                        sender.sendMessage(prefix + "Es sind derzeit §e§l" + i + " Support Chats §7Anfragen §aoffen")
+                        sender.msg("§8[]===================================[]")
+                        sender.msg("""${prefix}Es sind derzeit §e§l$i Support Chats §7Anfragen §aoffen""")
                     } else {
-                        sender.sendMessage(prefix + "§cDerzeit sind keine Support Chats Anfragen offen")
+                        sender.msg("$prefix§cDerzeit sind keine Support Chats Anfragen offen")
                     }
                 }
             } else {
                 //Normal Member
                 if (args.isEmpty()) {
-                    sender.sendMessage(prefix + "Wenn du den §e§lSupport Chat §7starten möchtest gebe ein §8§oBetreff §7ein")
-                    sender.sendMessage(prefix + "Möchtest du eine Anfrage abbrechen? §8§o/support cancel")
+                    sender.msg(prefix + "Wenn du den §e§lSupport Chat §7starten möchtest gebe ein §8§oBetreff §7ein")
+                    sender.msg(prefix + "Möchtest du eine Anfrage abbrechen? §8§o/support cancel")
                 } else {
                     var supporter = 0
-                    for (all in ProxyServer.getInstance().getPlayers()) {
+                    for (all in players) {
                         if (all.hasPermission("professionalbans.supportchat") || all.hasPermission("professionalbans.*")) {
                             supporter++
                         }
@@ -94,42 +92,37 @@ class SupportChat(name: String) : Command(name) {
                         if (!openchats.containsKey(sender)) {
                             if (supporter > 0) {
                                 openchats[sender] = subject
-                                sender.sendMessage(prefix + "Du hast eine Anfrage mit dem Betreff §e§l" + subject + " §7gestartet")
-                                for (all in ProxyServer.getInstance().getPlayers()) {
-                                    if (all.hasPermission("professionalbans.supportchat") || all.hasPermission("professionalbans.*")) {
-                                        all.sendMessage(prefix + "§e§l" + sender.name + " §7benötigt Support §8(§e§o" + subject + "§8)")
+                                sender.msg(prefix + "Du hast eine Anfrage mit dem Betreff §e§l" + subject + " §7gestartet")
+                                for (all in players) {
+                                    if (all.hasPermission("professionalbans.supportchat")) {
+                                        all.msg(prefix + "§e§l" + sender.name + " §7benötigt Support §8(§e§o" + subject + "§8)")
                                         val tc = TextComponent()
                                         tc.text = "§aSupport Chat starten"
                                         tc.clickEvent = ClickEvent(ClickEvent.Action.RUN_COMMAND, "/support " + sender.name)
-                                        tc.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("§7Klicken um den Chat mit §e§l" + sender.name + " §7zu starten").create())
+                                        tc.hoverEvent = HoverEvent(HoverEvent.Action.SHOW_TEXT, ComponentBuilder("""§7Klicken um den Chat mit §e§l${sender.name} 
+                                            |§7zu starten""".trimMargin()).create())
                                         all.sendMessage(tc)
                                     }
                                 }
                             } else {
-                                sender.sendMessage(prefix + "§cDerzeit ist kein Supporter online")
+                                sender.msg("$prefix§cDerzeit ist kein Supporter online")
                             }
                         } else {
-                            sender.sendMessage(prefix + "Du hast bereits eine §e§lSupport Chat §7Anfrage gestellt")
-                            sender.sendMessage(prefix + "Möchtest du diese Anfrage §cabbrechen §7benutze §c§l/support cancel")
+                            sender.msg(prefix + "Du hast bereits eine §e§lSupport Chat §7Anfrage gestellt")
+                            sender.msg(prefix + "Möchtest du diese Anfrage §cabbrechen §7benutze §c§l/support cancel")
                         }
                     } else {
                         if (!openchats.containsKey(sender)) {
                             openchats.remove(sender)
-                            sender.sendMessage(prefix + "Deine Anfrage wurde erfolgreich §cgelöscht")
+                            sender.msg(prefix + "Deine Anfrage wurde erfolgreich §cgelöscht")
                         } else {
-                            sender.sendMessage(prefix + "§cDu hast derzeit keine offene Anfrage")
+                            sender.msg("$prefix§cDu hast derzeit keine offene Anfrage")
                         }
                     }
                 }
             }
         } else {
-            console.sendMessage(prefix + "Der §e§lSupport Chat §7ist nur als Spieler verfügbar")
+            console.msg(prefix + "Der §e§lSupport Chat §7ist nur als Spieler verfügbar")
         }
-    }
-
-    companion object {
-
-        var openchats = HashMap<ProxiedPlayer, String>()
-        var activechats = HashMap<ProxiedPlayer, ProxiedPlayer>()
     }
 }

@@ -1,131 +1,118 @@
 package de.tutorialwork.commands
 
 import de.tutorialwork.console
-import de.tutorialwork.main.Main
+import de.tutorialwork.noPerms
 import de.tutorialwork.prefix
 import de.tutorialwork.utils.*
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
+import java.lang.Long
 
 class Check(name: String) : Command(name) {
 
     override fun execute(sender: CommandSender, args: Array<String>) {
         if (sender is ProxiedPlayer) {
-            if (sender.hasPermission("professionalbans.check") || sender.hasPermission("professionalbans.*")) {
+            if (sender.hasPermission("professionalbans.check")) {
                 if (args.isEmpty()) {
-                    sender.sendMessage(prefix + "/check <Spieler/IP>")
+                    sender.msg("$prefix/check <Spieler/IP>")
                 } else {
                     val uuid = UUIDFetcher.getUUID(args[0]) ?: return
                     if (IPBan.validate(args[0])) {
                         val ip = args[0]
-                        if (IPManager.ipExists(ip)) {
-                            sender.sendMessage("§8[]===================================[]")
-                            if (IPManager.getPlayerFromIP(ip) != null) {
-                                sender.sendMessage("§7Spieler: §e§l" + (IPManager.getPlayerFromIP(ip)
-                                        ?: return).name)
+                        if (ip.ipExists) {
+                            sender.msg("§8[]===================================[]")
+                            sender.msg("§7Spieler: §e§l" + ip.player.name)
+                            if (ip.isBanned) {
+                                sender.msg("§7IP-Ban: §c§lJa §8/ " + uuid.ip.reason)
                             } else {
-                                sender.sendMessage("§7Spieler: §c§lKeiner")
+                                sender.msg("§7IP-Ban: §a§lNein")
                             }
-                            if (IPManager.isBanned(ip)) {
-                                sender.sendMessage("§7IP-Ban: §c§lJa §8/ " + IPManager.getReasonString(IPManager.getIPFromPlayer(uuid)))
-                            } else {
-                                sender.sendMessage("§7IP-Ban: §a§lNein")
-                            }
-                            sender.sendMessage("§7Bans: §e§l" + IPManager.getBans(ip))
-                            sender.sendMessage("§7Zuletzt genutzt: §e§l" + BanManager.formatTimestamp(IPManager.getLastUseLong(ip)))
-                            sender.sendMessage("§8[]===================================[]")
+                            sender.msg("§7Bans: §e§l" + ip.bans)
+                            sender.msg("§7Zuletzt genutzt: §e§l" + ip.lastUseLong.formatTime)
+                            sender.msg("§8[]===================================[]")
                         } else {
-                            sender.sendMessage(prefix + "§cZu dieser IP-Adresse sind keine Informationen verfügbar")
+                            sender.msg("$prefix§cZu dieser IP-Adresse sind keine Informationen verfügbar")
                         }
                     } else {
-                        if (BanManager.playerExists(uuid)) {
-                            sender.sendMessage("§8[]===================================[]")
-                            sender.sendMessage("§7Spieler: §e§l" + uuid.name)
-                            if (BanManager.isBanned(uuid)) {
-                                sender.sendMessage("§7Gebannt: §c§lJa §8/ " + uuid.reasonString)
+                        if (uuid.playerExists()) {
+                            sender.msg("§8[]===================================[]")
+                            sender.msg("§7Spieler: §e§l" + uuid.name)
+                            if (uuid.isBanned) {
+                                sender.msg("§7Gebannt: §c§lJa §8/ " + uuid.reasonString)
                             } else {
-                                sender.sendMessage("§7Gebannt: §a§lNein")
+                                sender.msg("§7Gebannt: §a§lNein")
                             }
-                            if (BanManager.isMuted(uuid)) {
-                                sender.sendMessage("§7Gemutet: §c§lJa §8/ " + uuid.reasonString)
+                            if (uuid.isMuted) {
+                                sender.msg("§7Gemutet: §c§lJa §8/ " + uuid.reasonString)
                             } else {
-                                sender.sendMessage("§7Gemutet: §a§lNein")
+                                sender.msg("§7Gemutet: §a§lNein")
                             }
-                            if (IPManager.isBanned(IPManager.getIPFromPlayer(uuid).toString())) {
-                                sender.sendMessage("§7IP-Ban: §c§lJa §8/ " + IPManager.getReasonString(IPManager.getIPFromPlayer(uuid).toString()))
+                            if (uuid.ip.isBanned) {
+                                sender.msg("§7IP-Ban: §c§lJa §8/ " + uuid.ip.reason)
                             } else {
-                                sender.sendMessage("§7IP-Ban: §a§lNein")
+                                sender.msg("§7IP-Ban: §a§lNein")
                             }
-                            sender.sendMessage("§7Bans: §e§l" + BanManager.getBans(uuid))
-                            sender.sendMessage("§7Mutes: §e§l" + BanManager.getMutes(uuid))
-                            sender.sendMessage("§7Letzter Login: §e§l" + BanManager.formatTimestamp(java.lang.Long.valueOf(BanManager.getLastLogin(uuid))))
-                            sender.sendMessage("§7Erster Login: §e§l" + BanManager.formatTimestamp(java.lang.Long.valueOf(BanManager.getFirstLogin(uuid))))
-                            sender.sendMessage("§8[]===================================[]")
+                            sender.msg("§7Bans: §e§l" + uuid.bans)
+                            sender.msg("§7Mutes: §e§l" + uuid.mutes)
+                            sender.msg("§7Letzter Login: §e§l" + Long.valueOf(uuid.lastLogin).formatTime)
+                            sender.msg("§7Erster Login: §e§l" + Long.valueOf(uuid.firstLogin).formatTime)
+                            sender.msg("§8[]===================================[]")
                         } else {
-                            sender.sendMessage(prefix + "§cDieser Spieler hat den Server noch nie betreten")
+                            sender.msg("$prefix§cDieser Spieler hat den Server noch nie betreten")
                         }
                     }
                 }
             } else {
-                sender.sendMessage(Main.noPerms)
+                sender.msg(noPerms)
             }
         } else {
             if (args.isEmpty()) {
-                console.sendMessage(prefix + "/check <Spieler/IP>")
+                console.msg("$prefix/check <Spieler/IP>")
             } else {
                 val uuid = UUIDFetcher.getUUID(args[0]) ?: return
                 if (IPBan.validate(args[0])) {
                     val ip = args[0]
-                    if (IPManager.ipExists(ip)) {
-                        console.sendMessage("§8[]===================================[]")
-                        if (IPManager.getPlayerFromIP(ip) != null) {
-                            console.sendMessage("§7Spieler: §e§l" + (IPManager.getPlayerFromIP(ip)
-                                    ?: return).name)
+                    if (ip.ipExists) {
+                        console.msg("§8[]===================================[]")
+                        console.msg("§7Spieler: §e§l" + ip.player.name)
+                        if (ip.isBanned) {
+                            console.msg("§7IP-Ban: §c§lJa §8/ " + uuid.ip.reason)
                         } else {
-                            console.sendMessage("§7Spieler: §c§lKeiner")
+                            console.msg("§7IP-Ban: §a§lNein")
                         }
-                        if (IPManager.isBanned(ip)) {
-                            console.sendMessage("§7IP-Ban: §c§lJa §8/ " + IPManager.getReasonString(IPManager.getIPFromPlayer(uuid).toString()))
-                        } else {
-                            console.sendMessage("§7IP-Ban: §a§lNein")
-                        }
-                        console.sendMessage("§7Bans: §e§l" + IPManager.getBans(ip))
-                        console.sendMessage("§7Zuletzt genutzt: §e§l" + BanManager.formatTimestamp(IPManager.getLastUseLong(ip)))
-                        console.sendMessage("§8[]===================================[]")
+                        console.msg("§7Bans: §e§l" + ip.bans)
+                        console.msg("§7Zuletzt genutzt: §e§l" + ip.lastUseLong.formatTime)
+                        console.msg("§8[]===================================[]")
                     } else {
-                        console.sendMessage(prefix + "§cZu dieser IP-Adresse sind keine Informationen verfügbar")
+                        console.msg("$prefix§cZu dieser IP-Adresse sind keine Informationen verfügbar")
                     }
                 } else {
-                    if (BanManager.playerExists(uuid)) {
-                        console.sendMessage("§8[]===================================[]")
-                        console.sendMessage("§7Spieler: §e§l" + uuid.name)
-                        if (BanManager.isBanned(uuid)) {
-                            console.sendMessage("§7Gebannt: §c§lJa §8/ " + uuid.reasonString)
+                    if (uuid.playerExists()) {
+                        console.msg("§8[]===================================[]")
+                        console.msg("§7Spieler: §e§l" + uuid.name)
+                        if (uuid.isBanned) {
+                            console.msg("§7Gebannt: §c§lJa §8/ " + uuid.reasonString)
                         } else {
-                            console.sendMessage("§7Gebannt: §a§lNein")
+                            console.msg("§7Gebannt: §a§lNein")
                         }
-                        if (BanManager.isMuted(uuid)) {
-                            console.sendMessage("§7Gemutet: §c§lJa §8/ " + uuid.reasonString)
+                        if (uuid.isMuted) {
+                            console.msg("§7Gemutet: §c§lJa §8/ " + uuid.reasonString)
                         } else {
-                            console.sendMessage("§7Gemutet: §a§lNein")
+                            console.msg("§7Gemutet: §a§lNein")
                         }
-                        if (IPManager.isBanned(IPManager.getIPFromPlayer(uuid).toString())) {
-                            console.sendMessage("§7IP-Ban: §c§lJa §8/ " + IPManager.getReasonString(IPManager.getIPFromPlayer(uuid).toString()))
+                        if (uuid.ip.isBanned) {
+                            console.msg("§7IP-Ban: §c§lJa §8/ " + uuid.ip.reason)
                         } else {
-                            console.sendMessage("§7IP-Ban: §a§lNein")
+                            console.msg("§7IP-Ban: §a§lNein")
                         }
-                        console.sendMessage("§7Bans: §e§l" + BanManager.getBans(uuid))
-                        console.sendMessage("§7Mutes: §e§l" + BanManager.getMutes(uuid))
-                        if (BanManager.getLastLogin(uuid) != null) {
-                            console.sendMessage("§7Letzter Login: §e§l" + BanManager.formatTimestamp(java.lang.Long.valueOf(BanManager.getLastLogin(uuid))))
-                        }
-                        if (BanManager.getFirstLogin(uuid) != null) {
-                            console.sendMessage("§7Erster Login: §e§l" + BanManager.formatTimestamp(java.lang.Long.valueOf(BanManager.getFirstLogin(uuid))))
-                        }
-                        console.sendMessage("§8[]===================================[]")
+                        console.msg("§7Bans: §e§l" + uuid.bans)
+                        console.msg("§7Mutes: §e§l" + uuid.mutes)
+                        console.msg("§7Letzter Login: §e§l" + Long.valueOf(uuid.lastLogin).formatTime)
+                        console.msg("§7Erster Login: §e§l" + Long.valueOf(uuid.firstLogin).formatTime)
+                        console.msg("§8[]===================================[]")
                     } else {
-                        console.sendMessage(prefix + "§cDieser Spieler hat den Server noch nie betreten")
+                        console.msg("$prefix§cDieser Spieler hat den Server noch nie betreten")
                     }
                 }
             }
