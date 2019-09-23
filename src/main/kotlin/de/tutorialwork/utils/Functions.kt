@@ -1,9 +1,6 @@
 package de.tutorialwork.utils
 
-import de.tutorialwork.config
-import de.tutorialwork.configFile
-import de.tutorialwork.configProvider
-import de.tutorialwork.prefix
+import de.tutorialwork.global.*
 import net.md_5.bungee.api.ChatColor
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.chat.TextComponent
@@ -14,9 +11,9 @@ import java.net.URL
 import java.net.URLConnection
 import java.security.SecureRandom
 import java.util.*
+import kotlin.math.abs
 
 fun saveConfig(configuration: Configuration = config, file: File = configFile) = configProvider.save(configuration, file)
-
 
 fun Int.randomString(): String {
     val alphabet = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
@@ -27,36 +24,44 @@ fun Int.randomString(): String {
     return sb.toString()
 }
 
-fun ProxiedPlayer.sendTempban() {
-    var msg = config.getString("LAYOUT.TEMPBAN")
-    msg = msg.replace("%grund%", uniqueId.reasonString)
-    msg = msg.replace("%dauer%", uniqueId.endTime)
-    kick(msg.translateColors())
-}
+private fun ProxiedPlayer.getLayout(type: String, temp: Boolean) = config.getString("LAYOUT.${if (temp) "TEMP" else ""}$type")
+        .replace("%grund%", uniqueId.reasonString)
+        .replace("%dauer%", uniqueId.endTime)
+        .translateColors()
+
+private inline fun <reified T : ActionType> ProxiedPlayer.getLayout(temp: Boolean) = getLayout(T::class.java.simpleName.toUpperCase(), temp)
+fun ProxiedPlayer.sendTempBan() = kick(getLayout<ActionType.Ban>(true))
+fun ProxiedPlayer.sendTempMute() = msg(getLayout<ActionType.Mute>(true))
 
 
-fun ProxiedPlayer.sendTempmute() {
-    var msg = config.getString("LAYOUT.TEMPMUTE")
-    msg = msg.replace("%grund%", uniqueId.reasonString)
-    msg = msg.replace("%dauer%", uniqueId.endTime)
-    msg(msg.translateColors())
+fun ProxiedPlayer.sendBan() {
+    if (uniqueId.rawEnd == -1L)
+        kick(getLayout<ActionType.Ban>(false))
+    else sendTempBan()
 }
+
+fun ProxiedPlayer.sendMute() = if (uniqueId.rawEnd == -1L)
+    msg(getLayout<ActionType.Mute>(false))
+else sendTempMute()
 
 fun UUID.exists(sender: CommandSender): Unit? {
     val exists = this.playerExists()
-    return if (exists) sender.msg("$prefix§cDieser Spieler wurde nicht gefunden")
+    return if (exists) sender.msg("${prefix}§cDieser Spieler wurde nicht gefunden")
     else null
 }
 
 fun String.getUUID(sender: CommandSender): UUID? {
     val uuid = UUIDFetcher.getUUID(this)
     return if (uuid != null) uuid else {
-        sender.msg("$prefix§cDieser Spieler wurde nicht gefunden")
+        sender.msg("${prefix}§cDieser Spieler wurde nicht gefunden")
         null
     }
 }
 
-fun CommandSender.msg(string: String) = sendMessage(TextComponent(string))
+inline fun CommandSender.hasPermission(permission: String, code: () -> Unit) =
+        if (hasPermission("$permissionPrefix.$permission")) code() else msg(noPerms)
+
+fun CommandSender.msg(vararg messages: String) = sendMessage(*messages.map { TextComponent(it) }.toTypedArray())
 
 fun ProxiedPlayer.kick(string: String) = this.disconnect(TextComponent(string))
 
@@ -67,7 +72,7 @@ fun Long.formatTime(): String {
     val IMPORTANT = ChatColor.DARK_GRAY
     val TEXT = ChatColor.GRAY
 
-    val time = Math.abs(this)
+    val time = abs(this) / 1000
     val sec = time % 60
     val min = time / 60 % 60
     val hour = time / 3600 % 24

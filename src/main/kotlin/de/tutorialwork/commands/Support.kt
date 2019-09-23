@@ -1,7 +1,8 @@
 package de.tutorialwork.commands
 
-import de.tutorialwork.*
+import de.tutorialwork.global.*
 import de.tutorialwork.utils.msg
+import net.darkdevelopers.darkbedrock.darkness.general.functions.simpleName
 import net.md_5.bungee.api.CommandSender
 import net.md_5.bungee.api.chat.ClickEvent
 import net.md_5.bungee.api.chat.ComponentBuilder
@@ -10,7 +11,7 @@ import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.connection.ProxiedPlayer
 import net.md_5.bungee.api.plugin.Command
 
-class SupportChat(name: String) : Command(name) {
+object Support : Command(simpleName<Support>()) {
 
     override fun execute(sender: CommandSender, args: Array<String>) {
         if (sender is ProxiedPlayer) {
@@ -27,10 +28,10 @@ class SupportChat(name: String) : Command(name) {
                                 activechats.remove(key)
                             }
                         }
-                        sender.msg("$prefix§cDu hast den Support Chat beendet")
+                        sender.msg("${prefix}§cDu hast den Support Chat beendet")
                         return
                     } else {
-                        sender.msg("$prefix§cDu hast derzeit keinen offenen Support Chat")
+                        sender.msg("${prefix}§cDu hast derzeit keinen offenen Support Chat")
                         return
                     }
                 }
@@ -43,13 +44,13 @@ class SupportChat(name: String) : Command(name) {
                             if (openchats.containsKey(all)) {
                                 activechats[all] = sender
                                 openchats.remove(all)
-                                all.msg("""$prefix§e§l${sender.name} §7ist jetzt mit dir im Support Chat""")
-                                all.msg("$prefix§8§oDu kannst in den Support Chat schreiben in dem du einfach eine normale Nachricht schreibst")
-                                all.msg("$prefix§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
-                                sender.msg("""$prefix§e§l${all.name} §7ist jetzt im Support Chat mit dir""")
-                                sender.msg("$prefix§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
+                                all.msg("""${prefix}§e§l${sender.name} §7ist jetzt mit dir im Support Chat""")
+                                all.msg("${prefix}§8§oDu kannst in den Support Chat schreiben in dem du einfach eine normale Nachricht schreibst")
+                                all.msg("${prefix}§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
+                                sender.msg("""${prefix}§e§l${all.name} §7ist jetzt im Support Chat mit dir""")
+                                sender.msg("${prefix}§8§oDu kannst den Support Chat mit §7§o/support end §8§obeenden")
                             } else {
-                                sender.msg("$prefix§cDiese Anfrage ist ausgelaufen")
+                                sender.msg("${prefix}§cDiese Anfrage ist ausgelaufen")
                             }
                         }
                     }
@@ -69,7 +70,7 @@ class SupportChat(name: String) : Command(name) {
                         sender.msg("§8[]===================================[]")
                         sender.msg("""${prefix}Es sind derzeit §e§l$i Support Chats §7Anfragen §aoffen""")
                     } else {
-                        sender.msg("$prefix§cDerzeit sind keine Support Chats Anfragen offen")
+                        sender.msg("${prefix}§cDerzeit sind keine Support Chats Anfragen offen")
                     }
                 }
             } else {
@@ -101,7 +102,7 @@ class SupportChat(name: String) : Command(name) {
                                         all.sendMessage(tc)
                                     }
                                 }
-                            } else sender.msg("$prefix§cDerzeit ist kein Supporter online")
+                            } else sender.msg("${prefix}§cDerzeit ist kein Supporter online")
                         } else {
                             sender.msg(prefix + "Du hast bereits eine §e§lSupport Chat §7Anfrage gestellt")
                             sender.msg(prefix + "Möchtest du diese Anfrage §cabbrechen §7benutze §c§l/support cancel")
@@ -110,7 +111,7 @@ class SupportChat(name: String) : Command(name) {
                         if (!openchats.containsKey(sender)) {
                             openchats.remove(sender)
                             sender.msg(prefix + "Deine Anfrage wurde erfolgreich §cgelöscht")
-                        } else sender.msg("$prefix§cDu hast derzeit keine offene Anfrage")
+                        } else sender.msg("${prefix}§cDu hast derzeit keine offene Anfrage")
                     }
                 }
             }

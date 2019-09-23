@@ -1,7 +1,7 @@
 package de.tutorialwork.main
 
-import de.tutorialwork.*
 import de.tutorialwork.commands.*
+import de.tutorialwork.global.*
 import de.tutorialwork.listener.Chat
 import de.tutorialwork.listener.Login
 import de.tutorialwork.listener.Quit
@@ -25,13 +25,12 @@ class Main : Plugin() {
         registerCommands()
         registerListeners()
         //Konsolen Nachricht über das Plugin
-        proxy.console.apply {
-            msg("§8[]===================================[]")
-            msg("§e§lProfessionalBans §7§oReloaded §8| §7Version: §c$version")
-            msg("§7Developer: §e§lTutorialwork, LeBaasti")
-            msg("§5YT §7Kanal: §cyoutube.com/Tutorialwork")
-            msg("§8[]===================================[]")
-        }
+        proxy.console.msg(
+                "§8[]===================================[]",
+                "§e§lProfessionalBans §7§oReloaded §8| §7Version: §c$version",
+                "§7Developer: §e§lLartyHD, LeBaasti (((based by Tutorialwork)))",
+                "§8[]===================================[]"
+        )
 
 
         //Überprüft auf Bans aus dem Webinterface
@@ -42,10 +41,9 @@ class Main : Plugin() {
                     if (uuid.rawEnd == -1L) {
                         all.kick(config.getString("LAYOUT.BAN")
                                 .replace("%grund%", uuid.reasonString).translateColors())
-                    } else all.sendTempban()
+                    } else all.sendTempBan()
                 }
             }
-            saveConfig()
         }, 5, 5, TimeUnit.SECONDS)
     }
 
@@ -157,31 +155,17 @@ class Main : Plugin() {
 
     private fun registerCommands() {
         config
-        arrayOf(
-                Ban,
-                Unban("unBan"),
-                Kick("kick"),
-                WebAccount("webaccount"),
-                Check("check"),
-                IPBan,
-                Blacklist(),
-                WebVerify("webverify"),
-                SupportChat("support")
-        ).forEach(::register)
+        arrayOf(Ban, UnBan, Kick, WebAccount, Check, IPBan, Blacklist, WebVerify, Support).forEach(::register)
 
         if (config.getBoolean("REPORTS.ENABLED")) {
-            register(Report("report"))
-            register(Reports("reports"))
+            register(Report)
+            register(Reports)
         }
-        if (config.getBoolean("CHATLOG.ENABLED")) register(Chatlog("chatlog"))
+        if (config.getBoolean("CHATLOG.ENABLED")) register(ChatLog)
 
     }
 
-    private fun registerListeners() = arrayOf(
-            Login,
-            Chat,
-            Quit
-    ).forEach(::register)
+    private fun registerListeners() = arrayOf(Login, Chat, Quit).forEach(::register)
 
     private fun register(command: Command) = proxy.pluginManager.registerCommand(this, command)
     private fun register(listener: Listener) = proxy.pluginManager.registerListener(this, listener)

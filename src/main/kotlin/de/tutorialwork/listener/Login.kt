@@ -1,6 +1,6 @@
 package de.tutorialwork.listener
 
-import de.tutorialwork.*
+import de.tutorialwork.global.*
 import de.tutorialwork.utils.*
 import net.md_5.bungee.api.chat.TextComponent
 import net.md_5.bungee.api.event.PostLoginEvent
@@ -26,7 +26,7 @@ object Login : Listener {
                     }
                     if (config.getBoolean("VPN.BAN")) {
                         val id = config.getInt("VPN.BANID")
-                        uuid.ban(id, consoleName, increaseValue, increaseBans)
+                        uuid.ban(id.reason, consoleName)
                         ActionType.IpBan(id).sendNotify(event.connection.address.hostString, consoleName)
                         event.isCancelled = true
                         if (uuid.rawEnd == -1L) {
@@ -82,11 +82,11 @@ object Login : Listener {
     @EventHandler
     fun onFinalLogin(e: PostLoginEvent) {
         val p = e.player
-        if (p.hasPermission("professionalbans.reports")) {
-            if (countOpenReports() != 0) p.msg("${prefix}Derzeit sind noch Ãƒâ€šÃ‚Â§eÃƒâ€šÃ‚Â§l${countOpenReports()} Reports Ãƒâ€šÃ‚Â§7offen")
+        if (p.hasPermission("${permissionPrefix}reports")) {
+            if (countOpenReports() != 0) p.msg("${prefix}Derzeit sind noch §l${countOpenReports()} Reports §7offen")
         }
-        if (p.hasPermission("professionalbans.supportchat")) {
-            if (openchats.isNotEmpty()) p.msg("${prefix}Derzeit sind noch Ãƒâ€šÃ‚Â§eÃƒâ€šÃ‚Â§l${openchats.size} Ãƒâ€šÃ‚Â§7Support Chat Anfragen Ãƒâ€šÃ‚Â§aoffen")
+        if (p.hasPermission("${permissionPrefix}supportchat")) {
+            if (openchats.isNotEmpty()) p.msg("${prefix}Derzeit sind noch §l${openchats.size} §7Support Chat Anfragen §aoffen")
         }
     }
 

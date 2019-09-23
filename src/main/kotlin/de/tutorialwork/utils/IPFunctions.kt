@@ -1,8 +1,8 @@
 package de.tutorialwork.utils
 
 import com.google.gson.JsonObject
-import de.tutorialwork.APIKey
-import de.tutorialwork.mysql
+import de.tutorialwork.global.APIKey
+import de.tutorialwork.global.mysql
 import net.darkdevelopers.darkbedrock.darkness.general.functions.asString
 import net.darkdevelopers.darkbedrock.darkness.general.functions.load
 import java.util.*
@@ -87,7 +87,7 @@ var String.bans: Int
 val String.lastUseLong: Long
     get() {
         val rs = mysql.query("SELECT USED_AT FROM ips WHERE IP='$this'")
-        return if (rs?.next() == true) java.lang.Long.valueOf(rs.getString("USED_AT")) else 0
+        return if (rs?.next() == true) rs.getString("USED_AT").toLong() else 0
     }
 
 val String.isVpn: Boolean

@@ -1,8 +1,6 @@
 package de.tutorialwork.utils
 
-import de.tutorialwork.mysql
-import de.tutorialwork.players
-import de.tutorialwork.prefix
+import de.tutorialwork.global.*
 import net.md_5.bungee.api.CommandSender
 import java.text.SimpleDateFormat
 import java.util.*
@@ -49,7 +47,7 @@ var UUID.bans: Int
         val rs = mysql.query("SELECT BANS FROM bans WHERE uuid='$this'")
         return if (rs?.next() == true) rs.getInt("BANS") else 0
     }
-    set(value) {
+    private set(value) {
         if (playerExists()) mysql.update("UPDATE bans SET BANS='$value' WHERE uuid='$this'")
     }
 
@@ -58,7 +56,7 @@ var UUID.mutes: Int
         val rs = mysql.query("SELECT MUTES FROM bans WHERE uuid='$this'")
         return if (rs?.next() == true) rs.getInt("MUTES") else 0
     }
-    set(value) {
+    private set(value) {
         if (playerExists()) mysql.update("UPDATE bans SET MUTES='$value' WHERE uuid='$this'")
     }
 
@@ -113,11 +111,14 @@ val UUID.reasonString: String
 val Long.formatTime: String
     get() = SimpleDateFormat("dd.MM.yyyy HH:mm").format(Date(this))
 
-val Int.reasonTime: Int
+val String.reasonTime: Int
     get() {
-        val rs = mysql.query("SELECT TIME FROM reasons WHERE ID='$this'")
+        val rs = mysql.query("SELECT TIME FROM reasons WHERE REASON='$this'")
         return if (rs?.next() == true) rs.getInt("TIME") else 0
     }
+
+val Int.reasonTime: Int
+    get() = reason.reasonTime
 
 val Int.isBanReason: Boolean
     get() {
@@ -149,7 +150,6 @@ val Int.reason: String
         val rs = mysql.query("SELECT REASON FROM reasons WHERE ID='$this'")
         return if (rs?.next() == true) rs.getString("REASON") else none
     }
-
 
 val Int.reportName: String
     get() {
@@ -187,9 +187,7 @@ fun CommandSender.sendBanReasonsList() {
     while (rs?.next() == true) {
         val id = rs.getInt("ID")
         if (hasPermission(id.extraPermissions))
-            if (id.isBanReason)
-                msg("ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§7$id ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§8| ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§e${id.reason}")
-            else msg("ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§7$id ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§8| ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§e${id.reason} ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§8(ÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§cMUTEÃƒÆ’Ã†â€™Ãƒâ€ Ã¢â‚¬â„¢ÃƒÆ’Ã‚Â¢ÃƒÂ¢Ã¢â‚¬Å¡Ã‚Â¬Ãƒâ€¦Ã‚Â¡ÃƒÆ’Ã†â€™ÃƒÂ¢Ã¢â€šÂ¬Ã…Â¡ÃƒÆ’Ã¢â‚¬Å¡Ãƒâ€šÃ‚Â§8)")
+            msg("§7$id §8| §e${id.reason}" + if (id.isBanReason) "" else " §8(§cMUTE§8)")
     }
 }
 
@@ -212,35 +210,27 @@ private fun UUID.updateName(newName: String) {
     if (playerExists()) mysql.update("UPDATE bans SET NAME='$newName' WHERE uuid='${this}'")
 }
 
-fun UUID.ban(GrundID: Int, TeamUUID: String, Prozentsatz: Int, increaseBans: Boolean) {
-    if (GrundID.reasonTime == -1) {
-        //Perma Ban
-        mysql.update("""UPDATE bans SET BANNED='1', REASON='${GrundID.reason}', END='-1', TEAMUUID='$TeamUUID' WHERE uuid='$this'""")
-    } else {
+fun UUID.ban(reason: String, teamUUID: String, percentage: Int = increaseValue, increaseBans1: Boolean = increaseBans) {
+    val reasonTime = reason.reasonTime
+    val end = if (reasonTime == -1) -1 else {
         //Temp Ban
         //Formel: 1.50 * Anzahl an Tagen = Ergebniss (50%)
         val bans = bans
-        val defaultmins = GrundID.reasonTime
         val current = System.currentTimeMillis()
-        val end = current + GrundID.reasonTime * 60000L
-        val increaseEnd = current + (Prozentsatz / 100).toLong() + 1 * defaultmins.toLong() * bans.toLong() * 60000L //Formel!!!!!
-        if (increaseBans) {
-            if (bans > 0) mysql.update("""UPDATE bans SET BANNED='1', REASON='${GrundID.reason}', END='$end', TEAMUUID='$TeamUUID' WHERE uuid='${this}'""")
-            else mysql.update("""UPDATE bans SET BANNED='1', REASON='${GrundID.reason}', END='$increaseEnd', TEAMUUID='$TeamUUID' WHERE uuid='${this}'""")
-        } else mysql.update("""UPDATE bans SET BANNED='1', REASON='${GrundID.reason}', END='$end', TEAMUUID='$TeamUUID' WHERE uuid='${this}'""")
+        val endTime = current + reasonTime * 60000L
+        val increaseEnd = current + (percentage / 100).toLong() + 1 * reasonTime.toLong() * bans.toLong() * 60000L //Formel!!!!!
+        if (increaseBans1 && bans <= 0) increaseEnd else endTime
     }
+    mysql.update("""UPDATE bans SET BANNED='1', REASON='${reason}', END='$end', TEAMUUID='$teamUUID' WHERE uuid='${this}'""")
+    bans++
 }
 
-fun UUID.mute(GrundID: Int, TeamUUID: String) {
+fun UUID.mute(reason: String, teamUUID: String) {
     val current = System.currentTimeMillis()
-    val end = current + GrundID.reasonTime * 60000L
-    if (GrundID.reasonTime == -1) {
-        //Perma Mute
-        mysql.update("""UPDATE bans SET MUTED='1', REASON='${GrundID.reason}', END='-1', TEAMUUID='$TeamUUID' WHERE UUID='$this'""")
-    } else {
-        //Temp Mute
-        mysql.update("""UPDATE bans SET MUTED='1', REASON='${GrundID.reason}', END='$end', TEAMUUID='$TeamUUID' WHERE UUID='$this'""")
-    }
+    val reasonTime = reason.reasonTime
+    val end = if (reasonTime == -1) -1 else current + reasonTime * 60000L
+    mysql.update("""UPDATE bans SET MUTED='1', REASON='${reason}', END='$end', TEAMUUID='$teamUUID' WHERE UUID='$this'""")
+    mutes++
 }
 
 
@@ -256,7 +246,7 @@ fun ActionType.sendNotify(bannedName: String, senderName: String) {
             .replace("%banned-name%", bannedName)
             .replace("%sender-name%", senderName)
     for (all in players)
-        if (all.hasPermission("professionalbans.notify"))
+        if (all.hasPermission("${permissionPrefix}notify"))
             all.msg(message)
 }
 

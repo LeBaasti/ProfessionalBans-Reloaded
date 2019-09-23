@@ -1,63 +1,88 @@
 package de.tutorialwork.utils
 
+import de.tutorialwork.global.instance
+import java.util.*
+
 private const val bannedName = "%banned-name%"
 private const val senderName = "%sender-name%"
 
 @Suppress("CanBeParameter")
 sealed class ActionType {
 
+    abstract val reason: String
     abstract val message: String
+    open val node: String? = null
 
-    class Ban(private val reason: String) : ActionType() {
+    open fun execute(uuid: UUID, executor: String) {}
+
+    class Ban(override val reason: String) : ActionType() {
 
         constructor(id: Int) : this(id.reason)
 
         override val message: String = "§e§l$bannedName §7wurde von §c§l$senderName §cgebannt §7wegen §a$reason"
+
+        override fun execute(uuid: UUID, executor: String) {
+            uuid.ban(reason, executor)
+            val banned = instance.proxy.getPlayer(uuid) ?: return
+            banned.sendBan()
+        }
+
     }
 
-    class IpBan(private val reason: String) : ActionType() {
+    class IpBan(override val reason: String) : ActionType() {
 
         constructor(id: Int) : this(id.reason)
 
         override val message: String = "§7Die IP §e§l$bannedName §7wurde von §c§l$senderName §cgebannt §7wegen §a$reason"
     }
 
-    class Mute(private val reason: String) : ActionType() {
+    class Mute(override val reason: String) : ActionType() {
 
         constructor(id: Int) : this(id.reason)
 
         override val message: String = "§e§l$bannedName §7wurde von §c§l$senderName §cgemutet §7wegen §a$reason"
+
+        override fun execute(uuid: UUID, executor: String) {
+            uuid.mute(reason, executor)
+            val banned = instance.proxy.getPlayer(uuid) ?: return
+            banned.sendMute()
+        }
+
     }
 
-    class Kick(private val reason: String) : ActionType() {
+    class Kick(override val reason: String) : ActionType() {
         override val message: String = "§e§l$bannedName §7wurde von §c§l$senderName §cgekickt §7wegen §a$reason"
+
     }
 
     object UnBan : ActionType() {
+        override val reason: String = "UNBAN_BAN"
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §aentbannt"
     }
 
     object UnBanIp : ActionType() {
+        override val reason: String = "UNBAN_IP"
         override val message: String = "§c§l$senderName §7hat die IP-Adresse §e§l$bannedName §aentbannt"
     }
 
     object UnMute : ActionType() {
+        override val reason: String = "UNBAN_MUTE"
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §aentmutet"
     }
 
-    class Report(private val reason: String) : ActionType() {
+    class Report(override val reason: String) : ActionType() {
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
     }
 
-    class Blacklist(private val reason: String) : ActionType() {
+    class Blacklist(override val reason: String) : ActionType() {
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
     }
 
-    class Chatlog(private val reason: String) : ActionType() {
+    class Chatlog(override val reason: String, override val node: String?) : ActionType() {
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
     }
 
-    class Webaccount(private val reason: String) : ActionType() {
+    class Webaccount(override val reason: String) : ActionType() {
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
     }
 

@@ -84,10 +84,7 @@ wrapper {
             def lines = file.readLines()
             def list = []
             lines.each { String line ->
-                list += line.replace("var msg = config.getString(\"LAYOUT.TEMPMUTE\")\n" +
-                        "                        msg = msg.replace(\"%grund%\", uuid.reasonString)\n" +
-                        "                        msg = msg.replace(\"%dauer%\", uuid.endTime)\n" +
-                        "                        p.msg(msg))", "p.sendTempmute()")
+                list += line.replace("import de.tutorialwork.XX", "import de.tutorialwork.global.")
             }
             file.write(list.join("\n"), "UTF-8")
         }

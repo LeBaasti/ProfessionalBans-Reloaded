@@ -1,7 +1,6 @@
 package de.tutorialwork.utils
 
-import de.tutorialwork.mysql
-import kotlin.reflect.full.memberProperties
+import de.tutorialwork.global.mysql
 
 object LogManager {
 
@@ -14,14 +13,13 @@ object LogManager {
     //
     //UUID/BY_UUID = UUID des Spielers, null = keine Spieler verfügbar, "KONSOLE" = Befehl über Konsole ausgeführt
 
-    fun createEntry(uuid: String, ByUUID: String?, type: ActionType) {
-        mysql.update("INSERT INTO log(uuid, BYUUID, ACTION, NOTE, DATE) VALUES (" +
-                "'$uuid', " +
-                "'$ByUUID', " +
-                "'${type::class.java.simpleName.toUpperCase()}', " +
-                "'${type::class.memberProperties.find { it.name == "reason" }?.getter?.call(type)}', " +
-                "'${System.currentTimeMillis()}'" +
-                ")")
-    }
+    fun createEntry(uuid: String, byUUID: String?, type: ActionType) =
+            mysql.update("INSERT INTO log(uuid, BYUUID, ACTION, NOTE, DATE) VALUES (" +
+                    "'$uuid', " +
+                    "'$byUUID', " +
+                    "'${type.reason}', " +
+                    "'${type.node}', " +
+                    "'${System.currentTimeMillis()}'" +
+                    ")")
 
 }
