@@ -2,6 +2,7 @@ package de.tutorialwork.utils
 
 import de.tutorialwork.global.*
 import net.md_5.bungee.api.CommandSender
+import net.md_5.bungee.api.connection.ProxiedPlayer
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -234,9 +235,10 @@ fun UUID.mute(reason: String, teamUUID: String) {
 }
 
 
-fun UUID.createWebAccount(name: String, rank: Int, passwordHash: String) {
+fun UUID.createWebAccount(rank: RankType, password: String, sender: ProxiedPlayer) {
     mysql.update("""INSERT INTO accounts(UUID, USERNAME, PASSWORD, RANK, GOOGLE_AUTH, AUTHCODE) VALUES ('$this', '$name'
-        |, '$passwordHash', '$rank', 'null', 'initialpassword')""".trimMargin())
+        |, '${BCrypt.hashpw(password, BCrypt.gensalt())}', '${rank.id}', 'null', 'initialpassword')""".trimMargin())
+    LogManager.createEntry(this.toString(), sender.uniqueId.toString(), ActionType.WebAccount("ADD_WEBACCOUNT"))
 }
 
 fun UUID.deleteWebAccount() = mysql.update("DELETE FROM accounts WHERE UUID='$this'")

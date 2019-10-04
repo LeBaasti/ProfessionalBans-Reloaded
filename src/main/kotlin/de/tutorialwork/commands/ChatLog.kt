@@ -30,7 +30,7 @@ object ChatLog : Command(simpleName<ChatLog>()) {
             return
         }
         val executor = sender.executor
-        val id = Chat.createChatlog(target, executor)
+        val id = Chat.createChatLog(target, executor)
         LogManager.createEntry(target.toString(), executor, ActionType.Chatlog("CREATE_CHATLOG", id))
         sender.msg("${prefix}Der ChatLog von §e§l${target.name} §7wurde erfolgreich erstellt")
         sender.msg("${prefix}Link: §e§l$chatLogUrl$id")

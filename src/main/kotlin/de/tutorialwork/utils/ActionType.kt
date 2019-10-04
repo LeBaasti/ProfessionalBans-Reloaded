@@ -82,7 +82,7 @@ sealed class ActionType {
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
     }
 
-    class Webaccount(override val reason: String) : ActionType() {
+    class WebAccount(override val reason: String) : ActionType() {
         override val message: String = "§c§l$senderName §7hat §e§l$bannedName §7wegen §a$reason §7gemeldet"
     }
 

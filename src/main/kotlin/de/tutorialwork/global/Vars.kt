@@ -1,6 +1,6 @@
 package de.tutorialwork.global
 
-import de.tutorialwork.main.Main
+import de.tutorialwork.Main
 import de.tutorialwork.utils.MySQLConnect
 import net.md_5.bungee.api.connection.ProxiedPlayer
 

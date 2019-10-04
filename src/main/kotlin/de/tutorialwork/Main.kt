@@ -1,4 +1,4 @@
-package de.tutorialwork.main
+package de.tutorialwork
 
 import de.tutorialwork.commands.*
 import de.tutorialwork.global.*
