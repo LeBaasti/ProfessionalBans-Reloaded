@@ -13,91 +13,96 @@ import java.util.*
 
 object Chat : Listener {
 
-    @EventHandler
-    fun onChat(event: ChatEvent) {
-        val player = event.sender as ProxiedPlayer
-        if (event.message.startsWith("/")) return
-        if (player in activechats) {
-            event.isCancelled = true
-            val target = activechats[player] ?: return
-            val prefix = "§9§lSUPPORT §8• §c"
-            target.msg(
-                    "$prefix§c${player.name} §8» ${event.message}",
-                    "$prefix§aDu §8» ${event.message}"
-            )
-            activechats.keys.forEach { it.msg("$prefix§c${player.name} §8» ${event.message}") }
-        }
-        val uuid = player.uniqueId
-        if (uuid.isMuted) {
-            if (System.currentTimeMillis() >= uuid.rawEnd) {
-                uuid.unMute()
-                return
-            }
-            event.isCancelled = true
-            player.sendMute()
-        } else {
-            insertMessage(uuid, event.message, player.server.info.name)
-            if (player.hasPermission("${permissionPrefix}blacklist.bypass")) return
-            val predicate: (String) -> Boolean = { it.toUpperCase() in event.message.toUpperCase() }
-            when {
-                config.getBoolean("AUTOMUTE.ENABLED") -> {
-                    val a = if (blacklist.any(predicate)) "" else {
-                        if (adblacklist.any(predicate) && event.message.toUpperCase() !in adwhitelist) "AD" else return
-                    }
-                    uuid.mute(config.getInt("AUTOMUTE.${a}MUTEID").reason, consoleName)
-                    LogManager.createEntry(uuid.toString(), consoleName, ActionType.Blacklist("AUTOMUTE_${a}BLACKLIST"))
-                    ActionType.Mute(config.getInt("AUTOMUTE.MUTEID")).sendNotify(uuid.name, consoleName)
-                    player.sendMute()
-                }
-                config.getBoolean("AUTOMUTE.AUTOREPORT") -> {
-                    val reason: String = if (blacklist.any(predicate)) {
-                        player.msg("${prefix}§cAchte auf deine Wortwahl")
-                        "VERHALTEN"
-                    } else {
-                        if (adblacklist.any(predicate) && event.message.toUpperCase() !in adwhitelist) {
-                            player.msg("${prefix}§cDu darfst keine Werbung machen")
-                            "WERBUNG"
-                        } else return
-                    }
-                    val logId = createChatLog(uuid, consoleName)
-                    uuid.createReport(consoleName, reason, logId)
-                    ActionType.Report(reason).sendNotify(player.name, consoleName)
-                }
-                else -> return
-            }
-            event.isCancelled = true
-        }
-    }
+	@EventHandler
+	fun onChat(event: ChatEvent) {
+		if (event.message.startsWith("/")) return
+		val player = event.sender as? ProxiedPlayer ?: return
+		if (player in activeChats) {
+			event.isCancelled = true
+			val target = activeChats[player] ?: return
+			val prefix = "§9§lSUPPORT §8• §c"
+			target.msg(
+					"$prefix§c${player.name} §8» ${event.message}",
+					"$prefix§aDu §8» ${event.message}"
+			)
+			activeChats.keys.forEach { it.msg("$prefix§c${player.name} §8» ${event.message}") }
+		}
+		val uuid = player.uniqueId
+		if (uuid.isMuted) {
+			if (System.currentTimeMillis() >= uuid.rawEnd) {
+				uuid.unMute()
+				return
+			}
+			event.isCancelled = true
+			player.sendMute()
+		} else {
+			insertMessage(uuid, event.message, player.server.info.name)
+			if (player.hasPermission("${permissionPrefix}blacklist.bypass")) return
+			val predicate: (String) -> Boolean = { it.toUpperCase() in event.message.toUpperCase() }
+			when {
+				config.getBoolean("AUTOMUTE.ENABLED") -> {
+					val a = when {
+						blacklist.any(predicate) -> ""
+						adBlackList.any(predicate) && event.message.toUpperCase() !in adWhiteList -> "AD"
+						else -> return
+					}
+					uuid.createLogEntry(consoleName, ActionType.Blacklist("AUTOMUTE_${a}BLACKLIST"))
+					ActionType.Mute(config.getInt("AUTOMUTE.${a}MUTEID")).run {
+						execute(uuid, consoleName)
+						sendNotify(uuid.name, consoleName)
+					}
+				}
+				config.getBoolean("AUTOMUTE.AUTOREPORT") -> {
+					val reason: String = when {
+						blacklist.any(predicate) -> {
+							player.msg("${prefix}§cAchte auf deine Wortwahl")
+							"VERHALTEN"
+						}
+						adBlackList.any(predicate) && event.message.toUpperCase() !in adWhiteList -> {
+							player.msg("${prefix}§cDu darfst keine Werbung machen")
+							"WERBUNG"
+						}
+						else -> return
+					}
+					val logId = createChatLog(uuid, consoleName)
+					uuid.createReport(consoleName, reason, logId)
+					ActionType.Report(reason).sendNotify(player.name, consoleName)
+				}
+				else -> return
+			}
+			event.isCancelled = true
+		}
+	}
 
 
-    private fun insertMessage(uuid: UUID, message: String, server: String) {
-        Chat.insert {
-            it[this.uuid] = uuid.toString()
-            it[this.server] = server
-            it[this.message] = message
-            it[this.sendDate] = System.currentTimeMillis()
-        }
-    }
+	private fun insertMessage(uuid: UUID, message: String, server: String) {
+		Chat.insert {
+			it[this.uuid] = uuid.toString()
+			it[this.server] = server
+			it[this.message] = message
+			it[this.sendDate] = System.currentTimeMillis()
+		}
+	}
 
-    fun createChatLog(uuid: UUID, createdUUID: String): String {
-        val query = Chat.getByUUID(uuid)
-        val id = 20.randomString()
-        val now = System.currentTimeMillis()
-        val tenMinutes = 10 * 60 * 1000
-        query.forEach {
-            val tenAgo = System.currentTimeMillis() - tenMinutes
-            val sendDate = it[Chat.sendDate]
-            if (sendDate > tenAgo) {
-                mysql.update("""INSERT INTO chatlog(LOGID, uuid, CREATOR_UUID, SERVER, MESSAGE, SENDDATE, CREATED_AT) VALUES ('$id' 
+	fun createChatLog(uuid: UUID, createdUUID: String): String {
+		val query = Chat.getByUUID(uuid)
+		val id = 20.randomString()
+		val now = System.currentTimeMillis()
+		val tenMinutes = 10 * 60 * 1000
+		query.forEach {
+			val tenAgo = System.currentTimeMillis() - tenMinutes
+			val sendDate = it[Chat.sendDate]
+			if (sendDate > tenAgo) {
+				mysql.update("""INSERT INTO chatlog(LOGID, uuid, CREATOR_UUID, SERVER, MESSAGE, SENDDATE, CREATED_AT) VALUES ('$id' 
                             |,'$uuid', '$createdUUID', '${it[Chat.server]}', '${it[Chat.message]}'
                             |, '${sendDate}', '$now')""".trimMargin())
-            }
-        }
-        return id
-    }
+			}
+		}
+		return id
+	}
 
-    fun hasMessages(uuid: UUID): Boolean = Chat.getByUUID(uuid).any()
+	fun hasMessages(uuid: UUID): Boolean = Chat.getByUUID(uuid).any()
 
-    private fun Chat.getByUUID(uuid: UUID) = select { Chat.uuid.eq(uuid.toString()) }
+	private fun Chat.getByUUID(uuid: UUID) = select { Chat.uuid.eq(uuid.toString()) }
 
 }
