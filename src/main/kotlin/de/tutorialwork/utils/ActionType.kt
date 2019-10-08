@@ -1,6 +1,6 @@
 package de.tutorialwork.utils
 
-import de.tutorialwork.global.instance
+import de.tutorialwork.global.proxyServer
 import java.util.*
 
 private const val bannedName = "%banned-name%"
@@ -23,7 +23,7 @@ sealed class ActionType {
 
         override fun execute(uuid: UUID, executor: String) {
             uuid.ban(reason, executor)
-            val banned = instance.proxy.getPlayer(uuid) ?: return
+            val banned = proxyServer.getPlayer(uuid).get()
             banned.sendBan()
         }
 
@@ -44,7 +44,7 @@ sealed class ActionType {
 
         override fun execute(uuid: UUID, executor: String) {
             uuid.mute(reason, executor)
-            val banned = instance.proxy.getPlayer(uuid) ?: return
+            val banned = proxyServer.getPlayer(uuid).get()
             banned.sendMute()
         }
 

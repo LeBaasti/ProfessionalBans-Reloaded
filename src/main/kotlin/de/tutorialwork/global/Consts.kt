@@ -1,3 +1,3 @@
 package de.tutorialwork.global
 
-const val permissionPrefix = "professionalbans."
+const val permissionPrefix = "professionalbans"

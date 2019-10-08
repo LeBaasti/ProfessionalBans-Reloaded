@@ -1,13 +1,14 @@
 package de.tutorialwork.global
 
-import net.md_5.bungee.api.CommandSender
-import net.md_5.bungee.api.ProxyServer
-import net.md_5.bungee.api.connection.ProxiedPlayer
+import com.velocitypowered.api.command.CommandSource
+import com.velocitypowered.api.proxy.Player
+import com.velocitypowered.api.proxy.ProxyServer
 
-val version: String get() = instance.description.version
-val proxyServer: ProxyServer get() = ProxyServer.getInstance()
-val console: CommandSender get() = proxyServer.console
-val consoleName: String get() = console.name
-val players: Collection<ProxiedPlayer> get() = proxyServer.players
 
-val CommandSender.executor get() = if (this is ProxiedPlayer) uniqueId.toString() else consoleName
+val version: String get() = instance.server.version.version
+val proxyServer: ProxyServer get() = instance.server
+val console: CommandSource get() = proxyServer.consoleCommandSource
+val consoleName: String get() = "console"
+val players: Collection<Player> get() = proxyServer.allPlayers
+
+val CommandSource.executor get() = if (this is Player) uniqueId.toString() else consoleName

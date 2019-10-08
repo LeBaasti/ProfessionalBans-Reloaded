@@ -1,47 +1,52 @@
 package de.tutorialwork.commands
 
-import de.tutorialwork.global.*
+import com.velocitypowered.api.command.Command
+import com.velocitypowered.api.command.CommandSource
+import com.velocitypowered.api.proxy.Player
+import de.tutorialwork.configs.config
+import de.tutorialwork.global.console
+import de.tutorialwork.global.prefix
+import de.tutorialwork.global.proxyServer
+import de.tutorialwork.global.reportReasons
 import de.tutorialwork.utils.*
-import net.darkdevelopers.darkbedrock.darkness.general.functions.simpleName
-import net.md_5.bungee.api.CommandSender
-import net.md_5.bungee.api.connection.ProxiedPlayer
-import net.md_5.bungee.api.plugin.Command
 
-object Report : Command(simpleName<Report>()) {
+class Report : Command {
+    override fun execute(source: CommandSource, args: Array<out String>) {
+        if (source !is Player) {
+            console.msg("${prefix}§e§lReports §7sind nur als Spieler verfügbar")
+            return
+        }
+        if (args.size <= 1) {
+            val reasons = reportReasons.joinToString()
+            source.msg("${prefix}Verfügbare Reportgründe: §e§l$reasons")
+            source.msg("$prefix/report <Spieler> <Grund>")
+        } else {
+            if (args[0].toUpperCase() == source.username.toUpperCase()) source.msg("${prefix}§cDu kannst dich nicht selbst melden")
+            else {
+                val reason = args[1].toUpperCase()
+                if (reason in reportReasons) {
+                    val targetPlayer = proxyServer.getPlayer(args[0])
+                    val target = targetPlayer.get()
+                    if (targetPlayer.isPresent) {
+                        target.uniqueId.createReport(source.uniqueId.toString(), reason, null)
+                        source.msg("""${prefix}Der Spieler §e§l${target.username} §7wurde erfolgreich wegen §e§l$reason §7gemeldet""")
+                        ActionType.Report(reason).sendNotify(target.username, source.username)
+                        target.uniqueId.createLogEntry(source.uniqueId.toString(), ActionType.Report(reason))
+                    } else {
+                        if (config.offlineReports) {
+                            val uuid = UUIDFetcher.getUUID(args[0]) ?: return
+                            if (uuid.playerExists()) {
+                                uuid.createReport(source.uniqueId.toString(), reason, null)
+                                source.msg("${prefix}Der Spieler §e§l${args[0]} §7(§4Offline§7) wurde erfolgreich wegen §e§l$reason §7gemeldet")
+                                uuid.createLogEntry(source.uniqueId.toString(), ActionType.Report(reason))
+                            } else source.msg("${prefix}§cDieser Spieler wurde nicht gefunden")
+                        } else source.msg("${prefix}§cDieser Spieler ist offline")
 
-	override fun execute(sender: CommandSender, args: Array<String>) {
-		if (sender !is ProxiedPlayer) {
-			console.msg("${prefix}§e§lReports §7sind nur als Spieler verfügbar")
-			return
-		}
-		if (args.size <= 1) {
-			val reasons = reportReasons.joinToString()
-			sender.msg("${prefix}Verfügbare Reportgründe: §e§l$reasons")
-			sender.msg("$prefix/${name.toLowerCase()} <Spieler> <Grund>")
-		} else {
-			if (args[0].toUpperCase() == sender.name.toUpperCase()) sender.msg("${prefix}§cDu kannst dich nicht selbst melden")
-			else {
-				val reason = args[1].toUpperCase()
-				if (reason in reportReasons) {
-					val target = proxyServer.getPlayer(args[0])
-					if (target != null) {
-						target.uniqueId.createReport(sender.uniqueId.toString(), reason, null)
-						sender.msg("""${prefix}Der Spieler §e§l${target.name} §7wurde erfolgreich wegen §e§l$reason §7gemeldet""")
-						ActionType.Report(reason).sendNotify(target.name, sender.name)
-						target.uniqueId.createLogEntry(sender.uniqueId.toString(), ActionType.Report(reason))
-					} else {
-						if (config.getBoolean("REPORTS.OFFLINEREPORTS")) {
-							val uuid = UUIDFetcher.getUUID(args[0]) ?: return
-							if (uuid.playerExists()) {
-								uuid.createReport(sender.uniqueId.toString(), reason, null)
-								sender.msg("${prefix}Der Spieler §e§l${args[0]} §7(§4Offline§7) wurde erfolgreich wegen §e§l$reason §7gemeldet")
-								uuid.createLogEntry(sender.uniqueId.toString(), ActionType.Report(reason))
-							} else sender.msg("${prefix}§cDieser Spieler wurde nicht gefunden")
-						} else sender.msg("${prefix}§cDieser Spieler ist offline")
+                    }
+                } else source.msg("${prefix}§cDer eingegebene Reportgrund wurde nicht gefunden")
+            }
+        }
+    }
 
-					}
-				} else sender.msg("${prefix}§cDer eingegebene Reportgrund wurde nicht gefunden")
-			}
-		}
-	}
+
 }

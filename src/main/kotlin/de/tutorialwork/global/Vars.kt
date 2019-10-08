@@ -1,18 +1,18 @@
 package de.tutorialwork.global
 
+import com.velocitypowered.api.proxy.Player
+import de.tutorialwork.Main
 import de.tutorialwork.utils.MySQLConnect
-import net.md_5.bungee.api.connection.ProxiedPlayer
-import net.md_5.bungee.api.plugin.Plugin
 
 var prefix = "§e§lBANS §8• §7"
 val noPerms get() = "${prefix}§cDu hast keine Berechtigung diesen Befehl zu nutzen"
 
-lateinit var instance: Plugin
+val instance = Main.instance
 lateinit var mysql: MySQLConnect
 var APIKey: String? = null
 
-var openChats = mutableMapOf<ProxiedPlayer, String>()
-var activeChats = mutableMapOf<ProxiedPlayer, ProxiedPlayer>()
+var openChats = mutableMapOf<Player, String>()
+var activeChats = mutableMapOf<Player, Player>()
 var reportReasons = mutableListOf<String>()
 
 var blacklist = mutableListOf<String>()

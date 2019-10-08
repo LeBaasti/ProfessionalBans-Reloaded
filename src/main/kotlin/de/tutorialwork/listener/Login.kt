@@ -1,88 +1,81 @@
 package de.tutorialwork.listener
 
+import com.velocitypowered.api.event.Subscribe
+import com.velocitypowered.api.event.connection.PostLoginEvent
+import com.velocitypowered.api.event.connection.PreLoginEvent
+import de.tutorialwork.configs.config
 import de.tutorialwork.global.*
 import de.tutorialwork.utils.*
-import net.md_5.bungee.api.chat.TextComponent
-import net.md_5.bungee.api.event.PostLoginEvent
-import net.md_5.bungee.api.event.PreLoginEvent
-import net.md_5.bungee.api.plugin.Listener
-import net.md_5.bungee.event.EventHandler
+import net.kyori.text.TextComponent
 
-object Login : Listener {
+class Login {
 
-	@EventHandler
-	fun onPreLoginEvent(event: PreLoginEvent) {
-		val uuid = UUIDFetcher.getUUID(event.connection.name) ?: return
-		val ip = event.connection.virtualHost.hostName
-		/*val ip = event.connection.address.hostString*/
-		uuid.updatePlayer(event.connection.name)
-		ip.insertIP(uuid)
-		if (config.getBoolean("VPN.BLOCKED") && ip !in ipWhiteList && ip.isVpn) {
-			if (config.getBoolean("VPN.BAN")) {
-				val id = config.getInt("VPN.BANID")
-				uuid.ban(id.reason, consoleName)
-				ActionType.IpBan(id).sendNotify(event.connection.address.hostString, consoleName)
-				event.isCancelled = true
-				if (uuid.rawEnd == -1L) {
-					event.cancelReason = config.getString("LAYOUT.IPBAN").replace("%grund%", id.reason).translateColors()
-				} else {
-					var msg = config.getString("LAYOUT.TEMPIPBAN")
-					msg = msg.replace("%grund%", uuid.reasonString)
-					msg = msg.replace("%dauer%", uuid.endTime)
-					event.cancelReason = msg.translateColors()
-				}
-			} else if (config.getBoolean("VPN.KICK")) {
-				event.isCancelled = true
-				event.cancelReason = config.getString("VPN.KICKMSG").translateColors()
-			}
-		}
+    @Subscribe
+    fun onPreLoginEvent(event: PreLoginEvent) {
+        val ip = event.connection.virtualHost.get().hostName
+        val uuid = UUIDFetcher.getUUID(ip) ?: return
+        /*val ip = event.connection.address.hostString*/
+        uuid.updatePlayer(ip)
+        ip.insertIP(uuid)
+        if (config.vpnBlocked && ip !in ipWhiteList && ip.isVpn) {
+            if (config.vpnBan) {
+                val id = config.vpnBanID
+                uuid.ban(id.reason, consoleName)
+                ActionType.IpBan(id).sendNotify(event.connection.virtualHost.get().hostString, consoleName)
+                if (uuid.rawEnd == -1L) {
+                    event.result = PreLoginEvent.PreLoginComponentResult.denied(TextComponent.of(config.layoutIpBan.replace("%grund%", id.reason).translateColors()))
+                } else {
+                    var msg = config.layoutTempIpBan
+                    msg = msg.replace("%grund%", uuid.reasonString)
+                    msg = msg.replace("%dauer%", uuid.endTime)
+                    event.result = PreLoginEvent.PreLoginComponentResult.denied(TextComponent.of(msg.translateColors()))
+                }
+            } else if (config.vpnKick) {
+                event.result = PreLoginEvent.PreLoginComponentResult.denied(TextComponent.of(config.vpnKickMessage.translateColors()))
+            }
+        }
 
-		if (ip.isBanned) {
+        if (ip.isBanned) {
 
-			if (ip.rawEnd == -1L) {
-				event.isCancelled = true
-				event.setCancelReason(TextComponent(config.getString("LAYOUT.IPBAN").translateColors().replace("%grund%", ip.reason)))
+            if (ip.rawEnd == -1L) {
+                event.result = PreLoginEvent.PreLoginComponentResult.denied(TextComponent.of(config.layoutIpBan.translateColors().replace("%grund%", ip.reason)))
+            } else {
+                if (System.currentTimeMillis() < ip.rawEnd) {
+                    var msg = config.layoutTempIpBan
+                    msg = msg.replace("%grund%", ip.reason)
+                    msg = msg.replace("%dauer%", getEnd(ip))
+                    event.result = PreLoginEvent.PreLoginComponentResult.denied(TextComponent.of(msg.translateColors()))
+                } else {
+                    ip.unBan()
+                }
+            }
 
-			} else {
-				if (System.currentTimeMillis() < ip.rawEnd) {
-					event.isCancelled = true
-					var msg = config.getString("LAYOUT.TEMPIPBAN")
-					msg = msg.replace("%grund%", ip.reason)
-					msg = msg.replace("%dauer%", getEnd(ip))
-					event.cancelReason = msg.translateColors()
-				} else {
-					ip.unBan()
-				}
-			}
+        }
+        if (uuid.isBanned) {
+            if (uuid.rawEnd == -1L) {
+                event.result = PreLoginEvent.PreLoginComponentResult.denied(TextComponent.of(config.layoutBan.replace("%grund%", uuid.reasonString).translateColors()))
+            } else {
+                if (System.currentTimeMillis() < uuid.rawEnd) {
+                    var msg = config.layoutTempBan
+                    msg = msg.replace("%grund%", uuid.reasonString)
+                    msg = msg.replace("%dauer%", uuid.endTime)
+                    event.result = PreLoginEvent.PreLoginComponentResult.denied(TextComponent.of(msg.translateColors()))
+                } else {
+                    uuid.unBan()
+                }
+            }
+        }
+    }
 
-		}
-		if (uuid.isBanned) {
-			if (uuid.rawEnd == -1L) {
-				event.isCancelled = true
-				event.cancelReason = config.getString("LAYOUT.BAN").replace("%grund%", uuid.reasonString).translateColors()
-			} else {
-				if (System.currentTimeMillis() < uuid.rawEnd) {
-					event.isCancelled = true
-					var msg = config.getString("LAYOUT.TEMPBAN")
-					msg = msg.replace("%grund%", uuid.reasonString)
-					msg = msg.replace("%dauer%", uuid.endTime)
-					event.cancelReason = msg.translateColors()
-				} else {
-					uuid.unBan()
-				}
-			}
-		}
-	}
-
-	@EventHandler
-	fun onFinalLogin(event: PostLoginEvent) {
-		val player = event.player
-		if (player.hasPermission("${permissionPrefix}reports")) {
-			val countOpenReports = countOpenReports()
-			if (countOpenReports != 0) player.msg("${prefix}Derzeit sind noch §l$countOpenReports Reports §7offen")
-		}
-		if (player.hasPermission("${permissionPrefix}supportchat"))
-			if (openChats.isNotEmpty()) player.msg("${prefix}Derzeit sind noch §l${openChats.size} §7Support Chat Anfragen §aoffen")
-	}
+    @Subscribe
+    fun onPostLoginEvent(event: PostLoginEvent) {
+        val player = event.player
+        if (player.hasPermission("${permissionPrefix}reports")) {
+            val countOpenReports = countOpenReports()
+            if (countOpenReports != 0) player.msg("${prefix}Derzeit sind noch §l$countOpenReports Reports §7offen")
+        }
+        if (player.hasPermission("${permissionPrefix}supportchat"))
+            if (openChats.isNotEmpty()) player.msg("${prefix}Derzeit sind noch §l${openChats.size} §7Support Chat Anfragen §aoffen")
+    }
 
 }
